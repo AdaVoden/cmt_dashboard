@@ -9,6 +9,8 @@ python = "3.9.*"
 pyramid = "^2.0"
 Mako = "^1.1.6"
 pyramid-mako = "^1.1.0"
+numpy = "^1.21.5"
+attr = "^0.3.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
