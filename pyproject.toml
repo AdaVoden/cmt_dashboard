@@ -5,7 +5,7 @@ description = "Information website for the Clarke-Milone Telescope"
 authors = ["Harlan Shaw <harlan.shaw@ucalgary.ca>"]
 
 [tool.poetry.dependencies]
-python = "3.9"
+python = "3.9.*"
 pyramid = "^2.0"
 Mako = "^1.1.6"
 pyramid-mako = "^1.1.0"
