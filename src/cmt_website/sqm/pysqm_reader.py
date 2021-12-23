@@ -105,7 +105,8 @@ def _remove_non_digit_characters(data: str) -> str:
 
 @define
 class IPConnection:
-    """Given a port and a IPv4 I.P. address, creates a context manager connection with the address at specified port"""
+    """Given a port and a IPv4 I.P. address, creates a context manager connection
+    with the address at specified port"""
 
     ip_address: str = field(converter=str)
     port: int = field(converter=int)
@@ -147,7 +148,9 @@ class PhotometerMetadata:
 
 @define
 class SQMReader:
-    """Reader for the SQM photometer, uses an IPConnection to query an SQM ethernet device and returns either the metadata from the device or the data from the device, depending on functions called"""
+    """Reader for the SQM photometer, uses an IPConnection to query an SQM ethernet
+    device and returns either the metadata from the device or the data from the
+    device, depending on functions called"""
 
     connection: IPConnection = field()
 
@@ -309,6 +312,21 @@ class SQM:
 
 
 def make_sqm_reader(ip_address: str, port: int) -> SQM:
+    """Factory function, creates an SQM class for accessing SQM data from an ip address and port
+
+    Parameters
+    ----------
+    ip_address : str
+        IP address of SQM device
+    port : int
+        port to talk to SQM device
+
+    Returns
+    -------
+    SQM
+        SQM class ready for communication to the SQM device
+
+    """
     conn = IPConnection(ip_address=ip_address, port=port)
     reader = SQMReader(conn)
     return SQM(reader)
