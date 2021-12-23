@@ -1,10 +1,9 @@
+import logging
 from datetime import datetime, timezone
 
-from cmt_website.pysqm_reader import SQMLE
 from pyramid.httpexceptions import HTTPFound
+from pyramid.request import Request
 from pyramid.view import view_config
-
-SQM_READER = SQMLE(_device_address="136.159.57.187")
 
 
 @view_config(route_name="home")
@@ -59,8 +58,14 @@ def weather_page(request):
 
 
 @view_config(route_name="sqm", renderer="cmt_website:templates/sqm.mako")
-def sqm_page(request):
-    return {"sky_brightness": 15}
+def sqm_page(request: Request):
+    sqm = request.registry.settings["sqm"]
+    try:
+        _, _, _, _, _, sky_brightness = sqm.read_photometer()
+    except OSError as e:
+        logging.error(f"Unable to communicate with SQM device, received error {e}")
+        return {"sky_brightness": "ERROR"}
+    return {"sky_brightness": sky_brightness}
 
 
 @view_config(

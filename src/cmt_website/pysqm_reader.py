@@ -29,7 +29,6 @@ import logging
 import string
 import time
 from datetime import datetime, timedelta, timezone
-from ipaddress import IPv4Address
 from socket import AF_INET, SOCK_STREAM, socket
 from typing import Iterable, List, Literal
 
@@ -86,7 +85,7 @@ def _filtered_mean(array: Iterable[float], sigma: int = 3) -> float:
 
 
 def _remove_non_digit_characters(data: str) -> str:
-    """Removes all non-digit characters from a string
+    """Removes all non-digit characters from a string. Allows for '.' to exist, for decimal numbers
 
     Parameters
     ----------
@@ -99,17 +98,17 @@ def _remove_non_digit_characters(data: str) -> str:
         Cleaned string
 
     """
-    chars_to_remove = set(string.printable) - set(string.digits)
-    cleaned = data.strip(chars_to_remove)  # type: ignore
-    return cleaned
+    chars_to_remove = set(string.printable) - set(string.digits + ".")
+    cleaned = [x for x in list(data) if x not in chars_to_remove]
+    return "".join(cleaned)
 
 
 @define
 class IPConnection:
     """Given a port and a IPv4 I.P. address, creates a context manager connection with the address at specified port"""
 
-    ip_address: IPv4Address = field(converter=IPv4Address)
-    port: int = field()
+    ip_address: str = field(converter=str)
+    port: int = field(converter=int)
     connection: socket = field(init=False)
 
     def __enter__(self) -> socket:
@@ -118,6 +117,7 @@ class IPConnection:
         )
         self.connection = socket(family=AF_INET, type=SOCK_STREAM)
         self.connection.settimeout(20)
+        self.connection.setblocking(False)
         self.connection.connect((self.ip_address, self.port))
         return self.connection
 
@@ -240,7 +240,7 @@ class SQMReader:
                     logging.debug(f"Received sensor info: {str(msg)}")
                     return msg.split(",")
                 except AssertionError:
-                    logging.debug(
+                    logging.error(
                         f"On try {num} received {msg}. Expected {read_verifier} in message."
                     )
 
@@ -306,3 +306,9 @@ class SQM:
             ticks_uC,
             sky_brightness,
         )
+
+
+def make_sqm_reader(ip_address: str, port: int) -> SQM:
+    conn = IPConnection(ip_address=ip_address, port=port)
+    reader = SQMReader(conn)
+    return SQM(reader)
