@@ -1,4 +1,4 @@
-<%page args="current_temp, max_temp, min_temp, current_pressure, max_pressure, min_pressure, current_humidity, max_humidity, min_humidity, current_wind_speed, max_wind_speed, min_wind_speed, wind_direction"/>
+<%page args="weather_data"/>
 <%inherit file="base.mako" />
 <%block name="title">
     <title>RAO Weather</title>
@@ -49,31 +49,31 @@
         </tr>
         <tr>
             <td><b>Temperature</b></td>
-            <td>${current_temp} C</td>
-            <td>${max_temp} C</td>
-            <td>${min_temp} C</td>
+            <td>${weather_data.temperature.current} C</td>
+            <td>${weather_data.temperature.maximum} C</td>
+            <td>${weather_data.temperature.minimum} C</td>
         </tr>
         <tr>
             <td><b>Pressure</b></td>
-            <td>${current_pressure} millbars</td>
-            <td>${max_pressure} millbars</td>
-            <td>${min_pressure} millbars</td>
+            <td>${weather_data.pressure.current} millbars</td>
+            <td>${weather_data.pressure.maximum} millbars</td>
+            <td>${weather_data.pressure.minimum} millbars</td>
         </tr>
         <tr>
             <td><b>Relative Humidity</b></td>
-            <td>${current_humidity}%</td>
-            <td>${max_humidity}%</td>
-            <td>${min_humidity}%</td>
+            <td>${weather_data.humidity.current}%</td>
+            <td>${weather_data.humidity.maximum}%</td>
+            <td>${weather_data.humidity.minimum}%</td>
         </tr>
         <tr>
             <td><b>Wind Speed</b></td>
-            <td>${current_wind_speed} km/h</td>
-            <td>${max_wind_speed} km/h</td>
-            <td>${min_wind_speed} km/h</td>
+            <td>${weather_data.wind_speed.current} km/h</td>
+            <td>${weather_data.wind_speed.maximum} km/h</td>
+            <td>${weather_data.wind_speed.minimum} km/h</td>
         </tr>
         <tr>
             <td><b>Wind Direction</b></td>
-            <td>${wind_direction}</td>
+            <td>${weather_data.wind_direction.cardinal}</td>
             <td></td>
         </tr>
     </tbody>

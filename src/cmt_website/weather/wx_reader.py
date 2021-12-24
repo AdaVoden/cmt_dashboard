@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Union
 
 import pandas as pd
 from attr import define, field
@@ -6,12 +7,14 @@ from cmt_website.weather.reader_interface import WeatherReaderInterface
 from numpy import float32, float64, int32
 
 
-@define
+@define(slots=True)
 class WXReader(WeatherReaderInterface):
     """Reads the wx.log from Talon system using provided path and returns weather
     data from station"""
 
-    log_path: str = field(default="/usr/local/telescope/archive/logs/wx.log")
+    log_path: Union[str, Path] = field(
+        default="/usr/local/telescope/archive/logs/wx.log"
+    )
     _column_names_types = field(
         init=False,
         default=[

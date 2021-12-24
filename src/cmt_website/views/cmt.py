@@ -40,21 +40,8 @@ def cmt_page(request):
 
 @view_config(route_name="weather", renderer="cmt_website:templates/weather.mako")
 def weather_page(request):
-    return {
-        "current_temp": -18.1,
-        "max_temp": -9.1,
-        "min_temp": -19.3,
-        "current_pressure": 861.8,
-        "max_pressure": 863.3,
-        "min_pressure": 857.4,
-        "current_humidity": 69,
-        "max_humidity": 77,
-        "min_humidity": 59,
-        "current_wind_speed": 14,
-        "max_wind_speed": 32,
-        "min_wind_speed": 0,
-        "wind_direction": "NE",
-    }
+    weather_data = request.registry.settings["weather_data"]
+    return {"weather_data": weather_data}
 
 
 @view_config(route_name="sqm", renderer="cmt_website:templates/sqm.mako")

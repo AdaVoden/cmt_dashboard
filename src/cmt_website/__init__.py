@@ -1,7 +1,10 @@
+from pathlib import Path
+
 from pyramid.config import Configurator
 from pyramid.router import Router
 
 import cmt_website.sqm as sqm
+import cmt_website.weather as weather
 
 
 def main(global_config, **settings) -> Router:
@@ -16,5 +19,8 @@ def main(global_config, **settings) -> Router:
         sqm_reader = sqm.make_sqm_reader(
             ip_address=settings["sqm.ip_address"], port=settings["sqm.port"]
         )
+        log_path = Path(settings["weather.log_path"])
+        weather_data = weather.make_watched_weatherdata(reader_path=log_path)
         config.add_settings(sqm=sqm_reader)
+        config.add_settings(weather_data=weather_data)
     return config.make_wsgi_app()
