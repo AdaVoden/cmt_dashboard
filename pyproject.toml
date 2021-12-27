@@ -16,6 +16,7 @@ watchdog = "^2.1.6"
 argh = "^0.26.2"
 PyYAML = "^6.0"
 attrs = "^21.2.0"
+sysv-ipc = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
