@@ -10,10 +10,10 @@ class DomeState(Enum):
     Rotating: Rotating into target position
     Homing: Seeking dome's home"""
 
-    ABSENT = 1
-    STOPPED = 2
-    ROTATING = 3
-    HOMING = 4
+    ABSENT = 0
+    STOPPED = 1
+    ROTATING = 2
+    HOMING = 3
 
 
 class ShutterState(Enum):
@@ -25,12 +25,12 @@ class ShutterState(Enum):
     Open: Shutter is open
     Closed: Shutter is closed"""
 
-    ABSENT = 1
-    IDLE = 2
-    OPENING = 3
-    CLOSING = 4
-    OPEN = 5
-    CLOSED = 6
+    ABSENT = 0
+    IDLE = 1
+    OPENING = 2
+    CLOSING = 3
+    OPEN = 4
+    CLOSED = 5
 
 
 @define
