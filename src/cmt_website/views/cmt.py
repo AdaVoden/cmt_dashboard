@@ -13,25 +13,29 @@ def home_page(request):
 
 @view_config(route_name="cmt", renderer="cmt_website:templates/cmt.mako")
 def cmt_page(request):
+    status_reader = request.registry.settings["status"]
+    weather_data = request.register.settings["weather_data"]
+    telescope_status = status_reader.read_telescope()
+    dome_status = status_reader.read_dome()
     utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
     local = datetime.now().strftime("%H:%M:%S")
     date = datetime.today().strftime("%d/%m/%y")
     return {
-        "temperature": -18.1,
-        "humidity": 0,
-        "wind_speed": 10,
+        "temperature": weather_data.temperature.current,
+        "humidity": weather_data.humidity.current,
+        "wind_speed": weather_data.wind_speed.current,
         "date": date,
         "utc": utc,
         "lst": local,
-        "telescope_status": "Not Bacon",
-        "dome_status": "More bacon",
-        "telescope_altitude": "50:12:06",
-        "telescope_azimuth": "201:26:55",
-        "telescope_ra": "18:59:13.8",
-        "telescope_ha": "00:55:32.6",
-        "telescope_dec": "12:41:45",
-        "dome_azimuth": "180:0",
-        "dome_shutter": "ANGRY",
+        "telescope_status": telescope_status.status.name,
+        "dome_status": dome_status.status.name,
+        "telescope_altitude": telescope_status.altitude.dms,
+        "telescope_azimuth": telescope_status.azimuth.dms,
+        "telescope_ra": telescope_status.ra.hms,
+        "telescope_ha": telescope_status.ha.hms,
+        "telescope_dec": telescope_status.dec.hms,
+        "dome_azimuth": dome_status.azimuth.dms,
+        "dome_shutter": dome_status.shutterstatus.name,
         "camera_filter": "Potato",
         "camera_focus": 0.0,
         "camera_temperature": -10.0,
