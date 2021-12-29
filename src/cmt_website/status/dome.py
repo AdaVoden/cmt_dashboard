@@ -1,6 +1,7 @@
 from enum import Enum
 
 from attr import define, field
+from cmt_website.status.units import Radian
 
 
 class DomeState(Enum):
@@ -39,6 +40,5 @@ class Dome:
 
     state: DomeState = field()
     shutterstate: ShutterState = field()
-    tracking: bool = field()
-    azimuth: float = field()
-    target_azimuth: float = field()
+    tracking: bool = field(converter=bool)
+    azimuth: Radian = field(converter=Radian)
