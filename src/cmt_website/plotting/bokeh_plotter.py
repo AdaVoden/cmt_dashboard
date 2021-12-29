@@ -137,6 +137,7 @@ class BokehPlotter(PlottingInterface):
         if type == "scatter":
             return self._make_scatterplot(xs=x_data, ys=y_data, title=title)
 
+    # Next two functions violate DRY principles and should be refactored
     def _make_lineplot(
         self, xs: npt.NDArray[np.datetime64], ys: npt.NDArray[np.float_], title: str
     ) -> Figure:
@@ -191,4 +192,5 @@ class BokehPlotter(PlottingInterface):
 
         fig.scatter(x=xs, y=ys)
         fig.xaxis[0].formatter = DatetimeTickFormatter()
+        fig.yaxis[0].formatter = NumeralTickFormatter(format="0.00")
         return fig
