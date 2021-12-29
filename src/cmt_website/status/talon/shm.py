@@ -93,24 +93,21 @@ class SHMStatusReader:
         self._read_all()
         position = self._telescope_position
         status = self._status
-        telescope_state = TelescopeState(status.telescope_state)
         return Telescope(
-            state=telescope_state,
+            state=status.telescope_state,
             ra=position.J2000_ra,
             dec=position.J2000_dec,
-            target_ra=position.target_J2000_ra,
-            target_dec=position.target_J2000_dec,
+            hour_angle=position.EOD_ha,
+            azimuth=position.azimuth,
+            altitude=position.altitude,
         )
 
     def read_dome(self):
         self._read_all()
         status = self._status
-        domestate = DomeState(status.domestate)
-        shutterstate = ShutterState(status.shutterstate)
         return Dome(
-            state=domestate,
-            shutterstate=shutterstate,
+            state=status.domestate,
+            shutterstate=status.shutterstate,
             tracking=status.autodome,
             azimuth=status.dome_azimuth,
-            target_azimuth=status.target_dome_azimuth,
         )

@@ -41,4 +41,3 @@ class Dome:
     shutterstate: ShutterState = field()
     tracking: bool = field()
     azimuth: float = field()
-    target_azimuth: float = field()

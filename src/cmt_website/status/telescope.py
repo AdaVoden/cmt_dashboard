@@ -27,5 +27,6 @@ class Telescope:
     state: TelescopeState = field()
     ra: float = field()
     dec: float = field()
-    target_ra: float = field()
-    target_dec: float = field()
+    altitude: float = field()
+    azimuth: float = field()
+    hour_angle: float = field()
