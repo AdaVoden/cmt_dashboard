@@ -1,6 +1,7 @@
 from enum import Enum
 
 from attr import define, field
+from cmt_website.status.units import Radian
 
 
 class TelescopeState(Enum):
@@ -25,8 +26,8 @@ class Telescope:
     """Dataclass for the telescope's status."""
 
     state: TelescopeState = field()
-    ra: float = field()
-    dec: float = field()
-    altitude: float = field()
-    azimuth: float = field()
-    hour_angle: float = field()
+    ra: Radian = field(converter=Radian)
+    dec: Radian = field(converter=Radian)
+    altitude: Radian = field(converter=Radian)
+    azimuth: Radian = field(converter=Radian)
+    hour_angle: Radian = field(converter=Radian)
