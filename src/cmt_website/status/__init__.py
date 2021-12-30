@@ -1,1 +1,1 @@
-from cmt_website.status.talon.shm import SHMStatusReader
+from cmt_website.status.factory import make_status_reader

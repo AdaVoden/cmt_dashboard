@@ -3,6 +3,7 @@ from struct import Struct
 import sysv_ipc as sysv
 from attr import define, field
 from cmt_website.status.dome import Dome, DomeState, ShutterState
+from cmt_website.status.reader_interface import StatusReaderInterface
 from cmt_website.status.telescope import Telescope, TelescopeState
 
 # Formats of structs defined for Talon shared memory
@@ -51,8 +52,10 @@ class Status:
 
 
 @define
-class SHMStatusReader:
-    """Using a given hex key, initializes and mediates a connection to a Linux shared memory segment that's used by the Talon/OCAAS system to share information between different daemons"""
+class SHMStatusReader(StatusReaderInterface):
+    """Using a given hex key, initializes and mediates a connection to a Linux
+    shared memory segment that's used by the Talon/OCAAS system to share
+    information between different daemons"""
 
     # Buffer offsets from 0, used to read specific pieces of data from the shared memory
     # Calculated from the sizes the non-changing partings of telstatshm.h in libmisc
@@ -74,7 +77,7 @@ class SHMStatusReader:
             self._status_struct = Struct(STATUS_FORMAT)
             self._telescope_struct = Struct(TELESCOPE_POSITIONS_FORMAT)
         except sysv.ExistentialError:
-            raise BufferError(
+            raise RuntimeError(
                 "Unable to read shared memory, it currently does not exist."
             )
 
@@ -89,7 +92,7 @@ class SHMStatusReader:
         )
         self._status = Status(s_struct.unpack_from(shm_buffer, offset=s_offset))
 
-    def read_telescope(self):
+    def telescope(self):
         self._read_all()
         position = self._telescope_position
         status = self._status
@@ -102,7 +105,7 @@ class SHMStatusReader:
             altitude=position.altitude,
         )
 
-    def read_dome(self):
+    def dome(self):
         self._read_all()
         status = self._status
         return Dome(

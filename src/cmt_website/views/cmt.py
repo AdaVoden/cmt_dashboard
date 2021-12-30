@@ -14,9 +14,9 @@ def home_page(request):
 @view_config(route_name="cmt", renderer="cmt_website:templates/cmt.mako")
 def cmt_page(request):
     status_reader = request.registry.settings["status"]
-    weather_data = request.register.settings["weather_data"]
-    telescope_status = status_reader.read_telescope()
-    dome_status = status_reader.read_dome()
+    weather_data = request.registry.settings["weather_data"]
+    telescope_status = status_reader.telescope
+    dome_status = status_reader.dome
     utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
     local = datetime.now().strftime("%H:%M:%S")
     date = datetime.today().strftime("%d/%m/%y")
@@ -27,18 +27,15 @@ def cmt_page(request):
         "date": date,
         "utc": utc,
         "lst": local,
-        "telescope_status": telescope_status.status.name,
-        "dome_status": dome_status.status.name,
+        "telescope_status": telescope_status.state.name,
+        "dome_status": dome_status.state.name,
         "telescope_altitude": telescope_status.altitude.dms,
         "telescope_azimuth": telescope_status.azimuth.dms,
         "telescope_ra": telescope_status.ra.hms,
-        "telescope_ha": telescope_status.ha.hms,
+        "telescope_ha": telescope_status.hour_angle.hms,
         "telescope_dec": telescope_status.dec.hms,
         "dome_azimuth": dome_status.azimuth.dms,
-        "dome_shutter": dome_status.shutterstatus.name,
-        "camera_filter": "Potato",
-        "camera_focus": 0.0,
-        "camera_temperature": -10.0,
+        "dome_shutter": dome_status.shutterstate.name,
     }
 
 

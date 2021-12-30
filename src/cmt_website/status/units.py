@@ -4,11 +4,18 @@ from typing import Tuple
 from attr import define, field
 
 
+def radian_to_float(value) -> float:
+    if isinstance(value, Radian):
+        return value.value
+    else:
+        return float(value)
+
+
 @define(slots=True)
 class Radian:
     """Simple class to hold radian values and convert to different formats"""
 
-    value: float = field(converter=float)
+    value: float = field(converter=radian_to_float)
 
     @property
     def hms(self) -> str:
