@@ -21,21 +21,12 @@ def cmt_page(request):
     local = datetime.now().strftime("%H:%M:%S")
     date = datetime.today().strftime("%d/%m/%y")
     return {
-        "temperature": weather_data.temperature.current,
-        "humidity": weather_data.humidity.current,
-        "wind_speed": weather_data.wind_speed.current,
+        "weather_features": weather_data.features,
         "date": date,
         "utc": utc,
         "lst": local,
-        "telescope_status": telescope_status.state.name,
-        "dome_status": dome_status.state.name,
-        "telescope_altitude": telescope_status.altitude.dms,
-        "telescope_azimuth": telescope_status.azimuth.dms,
-        "telescope_ra": telescope_status.ra.hms,
-        "telescope_ha": telescope_status.hour_angle.hms,
-        "telescope_dec": telescope_status.dec.hms,
-        "dome_azimuth": dome_status.azimuth.dms,
-        "dome_shutter": dome_status.shutterstate.name,
+        "telescope": telescope_status,
+        "dome": dome_status,
     }
 
 

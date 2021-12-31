@@ -1,141 +1,25 @@
-<%page args="temperature,
-humidity,
-wind_speed,
+<%namespace name="features", file="features.mako"/>
+<%page args="weather_features,
 date,
 utc,
 lst,
-telescope_altitude,
-telescope_azimuth,
-telescope_ra,
-telescope_ha,
-telescope_dec,
-dome_azimuth,
-dome_shutter,
-telescope_status,
-dome_status"/>
+telescope,
+dome"/>
 <%inherit file="base.mako" />
 
 <%block name="title">
     <title>The 16" Telescope at the RAO</title>
 </%block>
-<table width="900" border="0">
-    <tr valign="top">
-        <td style="height: 200px; width: 400px">
-            <div style="text-align: center">
-                <h1><font color="green">The 16" Telescope at the RAO</font></h1>
-            </div>
-            <div style="text-align: left">
-                <b>Date:</b> ${date} <b>UT:</b> ${utc}
-                <b>LST:</b> ${lst}
-                * Note: If the time is not updating then the telescope is not
-                running.
-                <h2><font color="green">Weather</font></h2>
-                <b>Temperature:</b> ${temperature} C <b>Humidity:</b> ${humidity}% <b>Wind Speed</b> ${wind_speed}
-                km/h
-                <h2><font color="green">Telescope</font> <i>${telescope_status}</i></h2>
-            </div>
-            <table
-                style="width: 50%; text-align: left"
-                border="0"
-                cellpadding="0"
-                cellspacing="0"
-            >
-                <tbody>
-                    <tr>
-                        <td />
-                        <td style="vertical-align: center; text-align: center">
-                            <a href="telimage.html" target="new"
-                            ><img src="../telimage.jpg"
-                             /></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+<section class="time">
+    <div>
+        <b>Date:</b> ${date} <b>UT:</b> ${utc}
+        <b>LST:</b> ${lst}
+    </div>
 
-        </td>
-        <td style="height: 200px; width: 400px; text-align: top">
-            <table
-                style="width: 50%; text-align: left"
-                border="1"
-                cellpadding="2"
-                cellspacing="2"
-            >
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>Altitude</b>
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>Azimuth</b>
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>RA</b>
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>HA</b>
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>DEC</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            ${telescope_altitude}
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            ${telescope_azimuth}
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            ${telescope_ra}
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            ${telescope_ha}
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            ${telescope_dec}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <h2><font color="green">Dome</font> <i>${dome_status}</i></h2>
-            <table
-                style="width: 50%; text-align: left"
-                border="1"
-                cellpadding="2"
-                cellspacing="2"
-            >
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>Azimuth</b>
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            <b>Shutter</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">
-                            ${dome_azimuth}
-                        </td>
-                        <td></td>
-                        <td style="vertical-align: center; text-align: center">${dome_shutter}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <h2><font color="green">Camera</font></h2>
-        </td>
-    </tr>
-</table>
+</section>
+<main>
+    ${features.all_features(weather_features)}
+    ${features.telescope_widget(telescope, size=2)}
+    ${features.dome_widget(dome, size=2)}
+
+</main>

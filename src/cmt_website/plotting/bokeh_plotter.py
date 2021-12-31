@@ -72,7 +72,7 @@ class BokehPlotter(PlottingInterface):
             title="Weather Station Pressure over Time",
             type="line",
         )
-        plot.yaxis[0].axis_label = "Pressure [hbar]"
+        plot.yaxis[0].axis_label = "Pressure [mbar]"
         return json.dumps(json_item(plot, "plot-pressure"))
 
     @property
@@ -136,6 +136,7 @@ class BokehPlotter(PlottingInterface):
             return self._make_lineplot(xs=x_data, ys=y_data, title=title)
         if type == "scatter":
             return self._make_scatterplot(xs=x_data, ys=y_data, title=title)
+        raise ValueError("Received incorrect plot type")
 
     # Next two functions violate DRY principles and should be refactored
     def _make_lineplot(

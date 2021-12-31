@@ -1,4 +1,5 @@
 import logging
+from typing import Dict
 
 import pandas as pd
 from attr import define, field
@@ -6,7 +7,7 @@ from cmt_website.weather.feature import WeatherFeature, WindDirection
 from cmt_website.weather.reader_interface import WeatherReaderInterface
 
 
-@define(slots=True, eq=False)
+@define(slots=True)
 class WeatherData:
     reader: WeatherReaderInterface = field()
     temperature: WeatherFeature = field(init=False)
@@ -14,6 +15,16 @@ class WeatherData:
     wind_direction: WindDirection = field(init=False)
     humidity: WeatherFeature = field(init=False)
     pressure: WeatherFeature = field(init=False)
+
+    @property
+    def features(self) -> Dict[str, WeatherFeature]:
+        return {
+            "Temperature": self.temperature,
+            "Wind speed": self.wind_speed,
+            "Wind direction": self.wind_direction,
+            "Humidity": self.humidity,
+            "Pressure": self.pressure,
+        }
 
     def _create_features(self, df: pd.DataFrame):
         """Creates all weatherfeatures from read data
@@ -25,17 +36,13 @@ class WeatherData:
 
         """
 
-        self.temperature = WeatherFeature(df["Temperature"])
-        self.wind_speed = WeatherFeature(df["Wind Speed"])
-        self.wind_direction = WindDirection(df["Wind Direction"])
-        self.humidity = WeatherFeature(df["Humidity"])
-        self.pressure = WeatherFeature(df["Pressure"])
-
-    def __attrs_pre_init__(self):
-        """Calls super init for FileSystemEventHandler"""
-        super().__init__()
+        self.temperature = WeatherFeature(df["Temperature"], unit="\u00B0 C")
+        self.wind_speed = WeatherFeature(df["Wind Speed"], unit="km/h")
+        self.wind_direction = WindDirection(df["Wind Direction"], unit="\u00B0 E of N")
+        self.humidity = WeatherFeature(df["Humidity"], unit="%")
+        self.pressure = WeatherFeature(df["Pressure"], unit="mbar")
 
     def __attrs_post_init__(self):
-        """Post-initialization feature creation"""
+        """Post-initialization feature creation from weather data"""
         self._create_features(self.reader.read())
         logging.info("Created WeatherData class and features")
