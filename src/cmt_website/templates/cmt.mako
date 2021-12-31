@@ -10,16 +10,18 @@ dome"/>
 <%block name="title">
     <title>The 16" Telescope at the RAO</title>
 </%block>
-<section class="time">
-    <div>
-        <b>Date:</b> ${date} <b>UT:</b> ${utc}
+<article class="time">
+        <b>Date:</b> ${date} <b>UTC:</b> ${utc}
         <b>LST:</b> ${lst}
-    </div>
-
-</section>
+</article>
 <main>
-    ${features.all_features(weather_features)}
-    ${features.telescope_widget(telescope, size=2)}
-    ${features.dome_widget(dome, size=2)}
-
+    <section>
+        ${features.all_weather(weather_features)}
+    </section>
+    <section>
+        ${features.telescope_widget(telescope, size=2)}
+        ${features.dome_widget(dome, size=2)}
+    </section>
+    <section>
+    </section>
 </main>

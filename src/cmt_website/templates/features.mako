@@ -1,10 +1,10 @@
-<%def name="all_features(weather_features)">
+<%def name="all_weather(weather_features)">
     % for name, feature in weather_features.items():
-        ${feature_widget(feature, name, 1)}
+        ${weather_widget(feature, name, 1)}
     % endfor
 </%def>
 
-<%def name="feature_widget(weather_feature, name, size)">
+<%def name="weather_widget(weather_feature, name, size)">
     <article class="weather_feature, block-${size}">
         <h2 class="widget-header"> ${name} </h2>
         <span class="widget-value"> ${weather_feature.current} ${weather_feature.unit} </span>
@@ -37,10 +37,19 @@
     <article class="dome, block-${size}">
         <h2 class="widget-header" > Dome </h2>
         <span class="widget_status" > <b>Status</b> ${dome.state.name} </span>
-        <span class="widget-value"> <b>Position</b> ${dome.azimuth.dms}</span>
+        <span class="widget-value"> <b>Azimuth</b> ${dome.azimuth.dms}</span>
     </article>
     <article class="shutter, block-${size}">
         <h2 class="widget-header" > Shutter </h2>
         <span class="widget_status" > <b>Status</b> ${dome.shutterstate.name} </span>
     </article>
+</%def>
+
+<%def name="bokeh_plot_divs(targets, size=2)">
+    % for target in targets:
+        <article class="plot, block-${size}">
+            <div id="${target}">
+            </div>
+        </article>
+    % endfor
 </%def>
