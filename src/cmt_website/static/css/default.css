@@ -20,13 +20,15 @@ h2 {
 }
 main {
     display: grid;
-    grid-template-areas: "weather", "status", "plots", "other";
+    grid-template-areas: "weather", "status", "plots";
     grid-template-rows: repeat(auto-fill);
     gap: 0.5rem;
 }
 section {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, auto));
+    grid-template-columns: repeat(auto-fill, 12rem);
     gap: 1rem;
-
+}
+#plots {
+    grid-template-columns: repeat(auto-fill, 30rem);
 }

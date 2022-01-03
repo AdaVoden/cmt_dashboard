@@ -1,18 +1,13 @@
 import logging
 from datetime import datetime, timezone
 
-from pyramid.httpexceptions import HTTPMovedPermanently
 from pyramid.request import Request
 from pyramid.view import view_config
 
 
 @view_config(route_name="home")
-def home_page(request):
-    raise HTTPMovedPermanently("/cmt")
-
-
 @view_config(route_name="cmt", renderer="cmt_website:templates/cmt.mako")
-def cmt_page(request):
+def cmt_page(request: Request):
     status_reader = request.registry.settings["status"]
     weather_data = request.registry.settings["weather_data"]
     telescope_status = status_reader.telescope
@@ -29,6 +24,25 @@ def cmt_page(request):
         "dome": dome_status,
         "plots": ["temperature", "windspeed", "winddirection", "humidity", "pressure"],
     }
+
+
+@view_config(route_name="plot", renderer="json")
+def plot_json(request: Request):
+    plotter = request.registry.settings["plotter"]
+    plot_type = request.matchdict["plot_name"]
+    if plot_type == "temperature":
+        return plotter.temperature
+    if plot_type == "windspeed":
+        return plotter.wind_speed
+    if plot_type == "winddirection":
+        return plotter.wind_direction
+    if plot_type == "humidity":
+        return plotter.humidity
+    if plot_type == "pressure":
+        return plotter.pressure
+    if plot_type == "sqm":
+        return plotter.sqm
+    return {}
 
 
 # @view_config(route_name="weather", renderer="cmt_website:templates/weather.mako")

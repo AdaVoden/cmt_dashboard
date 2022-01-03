@@ -4,7 +4,8 @@ date,
 utc,
 lst,
 telescope,
-dome"/>
+dome,
+plots"/>
 <%inherit file="base.mako" />
 
 <%block name="title">
@@ -22,6 +23,12 @@ dome"/>
         ${features.telescope_widget(telescope, size=2)}
         ${features.dome_widget(dome, size=2)}
     </section>
-    <section>
+    <section id="plots">
+        ${features.bokeh_plot_divs(plots)}
     </section>
 </main>
+<footer>
+    <a href="http://cleardarksky.com/c/RothneyALkey.html" target="new">
+        <img src="http://cleardarksky.com/csk/getcsk.php?id=RothneyAL">
+    </a>
+</footer>

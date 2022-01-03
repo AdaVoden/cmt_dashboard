@@ -1,4 +1,3 @@
-import json
 from datetime import datetime, timezone
 from typing import Literal
 
@@ -22,62 +21,62 @@ class BokehPlotter(PlottingInterface):
 
     @property
     def temperature(self):
-        """Plot of temperature data, replaces div with 'plot-temperature' ID"""
+        """Plot of temperature data, replaces div with 'temperature' ID"""
         plot = self._plot_from_weatherfeature(
             feature=self.weather.temperature,
             title="Weather Station Temperature over Time",
             type="line",
         )
         plot.yaxis[0].axis_label = "Temperature [\u00B0 C]"
-        return json.dumps(json_item(plot, "plot-temperature"))
+        return json_item(plot, "temperature")
 
     @property
     def wind_speed(self):
-        """Plot of wind speed data, replaces div with 'plot-wind-speed' ID"""
+        """Plot of wind speed data, replaces div with 'wind-speed' ID"""
         plot = self._plot_from_weatherfeature(
             feature=self.weather.wind_speed,
             title="Weather Station Wind Speed over Time",
             type="line",
         )
         plot.yaxis[0].axis_label = "Wind Speed [km/h]"
-        return json.dumps(json_item(plot, "plot-wind-speed"))
+        return json_item(plot, "windspeed")
 
     @property
     def wind_direction(self):
-        """Plot of wind_direction data, replaces div with 'plot-wind-direction' ID"""
+        """Plot of wind_direction data, replaces div with 'wind-direction' ID"""
         plot = self._plot_from_weatherfeature(
             feature=self.weather.wind_direction,
             title="Weather Station Wind Direction over Time",
             type="scatter",
         )
         plot.yaxis[0].axis_label = "Wind Direction [Degrees East from North]"
-        return json.dumps(json_item(plot, "plot-wind-direction"))
+        return json_item(plot, "winddirection")
 
     @property
     def humidity(self):
-        """Plot of humidity data, replaces div with 'plot-humidity' ID"""
+        """Plot of humidity data, replaces div with 'humidity' ID"""
         plot = self._plot_from_weatherfeature(
             feature=self.weather.humidity,
             title="Weather Station Humidity over Time",
             type="line",
         )
         plot.yaxis[0].axis_label = "Humidity [%]"
-        return json.dumps(json_item(plot, "plot-humidity"))
+        return json_item(plot, "humidity")
 
     @property
     def pressure(self):
-        """Plot of pressure data, replaces div with 'plot-pressure' ID"""
+        """Plot of pressure data, replaces div with 'pressure' ID"""
         plot = self._plot_from_weatherfeature(
             feature=self.weather.wind_speed,
             title="Weather Station Pressure over Time",
             type="line",
         )
         plot.yaxis[0].axis_label = "Pressure [mbar]"
-        return json.dumps(json_item(plot, "plot-pressure"))
+        return json_item(plot, "pressure")
 
     @property
     def sqm(self):
-        """Plot of SQM data, replaces div with 'plot-sqm' ID"""
+        """Plot of SQM data, replaces div with 'sqm' ID"""
         pass
 
     @staticmethod

@@ -51,5 +51,10 @@
             <div id="${target}">
             </div>
         </article>
+        <script>
+         fetch('/plot/${target}')
+             .then(function(response) {return response.json(); })
+             .then(function(item) {return Bokeh.embed.embed_item(item);})
+        </script>
     % endfor
 </%def>
