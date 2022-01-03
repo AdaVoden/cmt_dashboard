@@ -12,6 +12,7 @@ class WeatherFeature:
     temperature"""
 
     _data: pd.Series = field()
+    unit: str = field()
     current: float = field(init=False)
     minimum: float = field(init=False)
     maximum: float = field(init=False)

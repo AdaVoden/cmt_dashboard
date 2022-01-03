@@ -13,6 +13,7 @@ class TelescopeState(Enum):
     Homing: Finding home positions
     Limiting: Finding limit positions"""
 
+    ERROR = -1
     STOPPED = 1
     HUNTING = 2
     TRACKING = 3

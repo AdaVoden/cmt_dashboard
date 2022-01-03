@@ -1,3 +1,4 @@
+<%namespace name="features" file="features.mako"/>
 <%page args="weather_data"/>
 <%inherit file="base.mako" />
 <%block name="title">
@@ -33,56 +34,7 @@
         </tbody>
     </table>
 </div>
-<br /><br />
-<table
-    style="width: 50%; text-align: center"
-    border="0"
-    cellpadding="2"
-    cellspacing="2"
->
-    <tbody>
-        <tr>
-            <td></td>
-            <td><b>Current</b></td>
-            <td><b>Max *</b></td>
-            <td><b>Min *</b></td>
-        </tr>
-        <tr>
-            <td><b>Temperature</b></td>
-            <td>${weather_data.temperature.current} C</td>
-            <td>${weather_data.temperature.maximum} C</td>
-            <td>${weather_data.temperature.minimum} C</td>
-        </tr>
-        <tr>
-            <td><b>Pressure</b></td>
-            <td>${weather_data.pressure.current} millbars</td>
-            <td>${weather_data.pressure.maximum} millbars</td>
-            <td>${weather_data.pressure.minimum} millbars</td>
-        </tr>
-        <tr>
-            <td><b>Relative Humidity</b></td>
-            <td>${weather_data.humidity.current}%</td>
-            <td>${weather_data.humidity.maximum}%</td>
-            <td>${weather_data.humidity.minimum}%</td>
-        </tr>
-        <tr>
-            <td><b>Wind Speed</b></td>
-            <td>${weather_data.wind_speed.current} km/h</td>
-            <td>${weather_data.wind_speed.maximum} km/h</td>
-            <td>${weather_data.wind_speed.minimum} km/h</td>
-        </tr>
-        <tr>
-            <td><b>Wind Direction</b></td>
-            <td>${weather_data.wind_direction.cardinal}</td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
-*In the last 24 hours<br />
-**Values updated approximately every half hour<br />
-***All values are as of Fri Dec 17 10:55:29 MST 2021
-<br />
-<br /><br />
+${features.all_features(weather_data.features)}
 <a href="http://cleardarksky.com/c/RothneyALkey.html" target="new">
     <img src="http://cleardarksky.com/csk/getcsk.php?id=RothneyAL" />
 </a>
