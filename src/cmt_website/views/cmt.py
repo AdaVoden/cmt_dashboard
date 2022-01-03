@@ -5,7 +5,7 @@ from pyramid.request import Request
 from pyramid.view import view_config
 
 
-@view_config(route_name="home")
+@view_config(route_name="home", renderer="cmt_website:templates/cmt.mako")
 @view_config(route_name="cmt", renderer="cmt_website:templates/cmt.mako")
 def cmt_page(request: Request):
     status_reader = request.registry.settings["status"]
