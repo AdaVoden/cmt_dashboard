@@ -14,12 +14,12 @@ class TelescopeState(Enum):
     Limiting: Finding limit positions"""
 
     ERROR = -1
-    STOPPED = 1
-    HUNTING = 2
-    TRACKING = 3
-    SLEWING = 4
-    HOMING = 5
-    LIMITING = 6
+    STOPPED = 0
+    HUNTING = 1
+    TRACKING = 2
+    SLEWING = 3
+    HOMING = 4
+    LIMITING = 5
 
 
 @define
