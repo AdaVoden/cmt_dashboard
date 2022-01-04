@@ -67,8 +67,8 @@ class Radian:
 
     @staticmethod
     def _rads_to_seconds(rads: float) -> int:
-        seconds_per_half_day = 43200
-        seconds_per_rad = seconds_per_half_day / pi
+        seconds_per_day = 86400
+        seconds_per_rad = seconds_per_day / pi
         return int(rads * seconds_per_rad)
 
     @staticmethod
