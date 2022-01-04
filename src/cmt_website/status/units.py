@@ -52,13 +52,13 @@ class Radian:
         arcminutes_per_degree = 60
         arcseconds_per_degree = 3600
         total_degrees = self.degree
-        degrees = floor(total_degrees)
+        degrees = round(total_degrees)
         arcminutes = floor((total_degrees - degrees) * arcminutes_per_degree)
         arcseconds = floor(
-            (total_degrees - degrees - arcminutes * arcminutes_per_degree)
+            (total_degrees - degrees - (arcminutes / arcminutes_per_degree))
             * arcseconds_per_degree
         )
-        return f"{degrees:02}\u00B0{arcminutes}'{arcseconds}''"
+        return f"{degrees:02}\u00B0{arcminutes:02}'{arcseconds:02}''"
 
     @property
     def degree(self) -> float:
