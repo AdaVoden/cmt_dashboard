@@ -52,9 +52,9 @@ class Radian:
         arcminutes_per_degree = 60
         arcseconds_per_degree = 3600
         total_degrees = self.degree
-        degrees = int(total_degrees)
-        arcminutes = round((total_degrees - degrees) * arcminutes_per_degree)
-        arcseconds = round(
+        degrees = floor(total_degrees)
+        arcminutes = int((total_degrees - degrees) * arcminutes_per_degree)
+        arcseconds = int(
             (total_degrees - degrees - (arcminutes / arcminutes_per_degree))
             * arcseconds_per_degree
         )
@@ -63,7 +63,7 @@ class Radian:
     @property
     def degree(self) -> float:
         """Degree value of radian"""
-        return degrees(round(self.value, ndigits=5))
+        return round(degrees(self.value), ndigits=3)
 
     @staticmethod
     def _rads_to_seconds(rads: float) -> int:
