@@ -26,7 +26,7 @@ class TelescopeState(Enum):
 class Telescope:
     """Dataclass for the telescope's status."""
 
-    state: TelescopeState = field()
+    state: TelescopeState = field(converter=TelescopeState)
     ra: Radian = field(converter=Radian)
     dec: Radian = field(converter=Radian)
     altitude: Radian = field(converter=Radian)

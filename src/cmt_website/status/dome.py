@@ -40,7 +40,7 @@ class ShutterState(Enum):
 class Dome:
     """Dataclass for the Dome's status, tracking tells us if the dome is tracking the telescope's direction"""
 
-    state: DomeState = field()
-    shutterstate: ShutterState = field()
+    state: DomeState = field(converter=DomeState)
+    shutterstate: ShutterState = field(converter=ShutterState)
     tracking: bool = field(converter=bool)
     azimuth: Radian = field(converter=Radian)

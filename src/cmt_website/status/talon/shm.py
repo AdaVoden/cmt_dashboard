@@ -35,7 +35,7 @@ class TelescopePosition:
 
 @define(slots=True)
 class Status:
-    telescope_state: TelescopeState = field(converter=TelescopeState)
+    telescope_state: int = field(converter=int)
     ccd_temp_status: int = field(converter=int)
     cam_state: int = field(converter=int)
     cam_temp: float = field(converter=float)
@@ -47,8 +47,8 @@ class Status:
     autodome: bool = field(converter=bool)
     dome_azimuth: float = field(converter=float)
     target_dome_azimuth: float = field(converter=float)
-    domestate: DomeState = field(converter=DomeState)
-    shutterstate: ShutterState = field(converter=ShutterState)
+    domestate: int = field(converter=int)
+    shutterstate: int = field(converter=int)
 
 
 @define
