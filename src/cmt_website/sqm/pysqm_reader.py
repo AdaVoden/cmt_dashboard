@@ -25,12 +25,14 @@ along with PySQM.  If not, see <http://www.gnu.org/licenses/>.
 ____________________________
 """
 
+import asyncio
 import logging
 import string
 import time
+from asyncio.streams import StreamReader, StreamWriter
 from datetime import datetime, timedelta, timezone
 from socket import AF_INET, SOCK_STREAM, socket
-from typing import Iterable, List, Literal
+from typing import Any, Coroutine, Iterable, List, Literal, Tuple
 
 import numpy as np
 from attr import define, field
@@ -110,20 +112,34 @@ class IPConnection:
 
     ip_address: str = field(converter=str)
     port: int = field(converter=int)
-    connection: socket = field(init=False)
+    connection: Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]] = field(
+        init=False
+    )
 
-    def __enter__(self) -> socket:
+    async def __aenter__(
+        self,
+    ) -> Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]]:
         logging.debug(
             f"Attempting to connect to SQM device at IP {str(self.ip_address)} and port {self.port}"
         )
-        self.connection = socket(family=AF_INET, type=SOCK_STREAM)
-        self.connection.settimeout(20)
-        self.connection.setblocking(False)
-        self.connection.connect((self.ip_address, self.port))
+        self.connection = asyncio.open_connection(
+            host=self.ip_address,
+            port=self.port,
+            family=AF_INET,
+            sock=SOCK_STREAM,
+            limit=256,
+        )
         return self.connection
 
-    def __exit__(self):
+    async def __aexit__(self, exception_type, exception_val, traceback):
         self.connection.close()
+        if exception_type is None:
+            return False
+        else:
+            logging.error(
+                f"Connection failed with exception type: {exception_type}, value: {exception_val}"
+            )
+            return True
 
 
 @define
@@ -154,7 +170,7 @@ class SQMReader:
 
     connection: IPConnection = field()
 
-    def read_data(self, tries: int = 1) -> PhotometerData:
+    async def read_data(self, tries: int = 1) -> PhotometerData:
         """Reads data from target SQM photometer
 
         Parameters
@@ -168,7 +184,7 @@ class SQMReader:
             Photometer data
 
         """
-        data_array = self._read(conn_type="data", tries=tries)
+        data_array = await self._read(conn_type="data", tries=tries)
         return PhotometerData(
             temperature=data_array[5],
             frequency=data_array[2],
@@ -176,7 +192,7 @@ class SQMReader:
             sky_brightness=data_array[1],
         )
 
-    def read_metadata(self, tries: int = 1) -> PhotometerMetadata:
+    async def read_metadata(self, tries: int = 1) -> PhotometerMetadata:
         """Reads metadata from target SQM photometer
 
         Parameters
@@ -190,7 +206,7 @@ class SQMReader:
             Photometer metadata object
 
         """
-        data_array = self._read(conn_type="metadata", tries=tries)
+        data_array = await self._read(conn_type="metadata", tries=tries)
         return PhotometerMetadata(
             protocol_number=data_array[1],
             model_number=data_array[2],
@@ -198,7 +214,7 @@ class SQMReader:
             serial_number=data_array[4],
         )
 
-    def _read(
+    async def _read(
         self, conn_type: Literal["metadata", "calibration", "data"], tries: int = 1
     ) -> List[str]:
         """Given a type of data to retrieve, uses a connection to retrieve target data.
@@ -232,11 +248,11 @@ class SQMReader:
             )
         read_command = read_types[conn_type]
         read_verifier = f"{read_command[0]},"
-        with self.connection as conn:
+        async with self.connection as conn:
             for num in range(tries):
-                conn.send(read_command.encode())  # type: ignore
-
-                msg = conn.recv(256).decode()
+                reader, writer = await conn
+                writer.write(read_command.encode())
+                msg = (await reader.read(256)).decode()
 
                 try:
                     assert read_verifier in msg
