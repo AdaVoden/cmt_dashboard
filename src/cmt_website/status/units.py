@@ -52,9 +52,9 @@ class Radian:
         arcminutes_per_degree = 60
         arcseconds_per_degree = 3600
         total_degrees = self.degree
-        degrees = round(total_degrees)
-        arcminutes = floor((total_degrees - degrees) * arcminutes_per_degree)
-        arcseconds = floor(
+        degrees = floor(total_degrees)
+        arcminutes = round((total_degrees - degrees) * arcminutes_per_degree)
+        arcseconds = round(
             (total_degrees - degrees - (arcminutes / arcminutes_per_degree))
             * arcseconds_per_degree
         )
