@@ -1,4 +1,4 @@
-from attr import define, field
+from attr import define
 from cmt_website.status.dome import Dome, DomeState, ShutterState
 from cmt_website.status.reader_interface import StatusReaderInterface
 from cmt_website.status.telescope import Telescope, TelescopeState

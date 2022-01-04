@@ -92,6 +92,7 @@ class SHMStatusReader(StatusReaderInterface):
         )
         self._status = Status(s_struct.unpack_from(shm_buffer, offset=s_offset))
 
+    @property
     def telescope(self):
         self._read_all()
         position = self._telescope_position
@@ -105,6 +106,7 @@ class SHMStatusReader(StatusReaderInterface):
             altitude=position.altitude,
         )
 
+    @property
     def dome(self):
         self._read_all()
         status = self._status
