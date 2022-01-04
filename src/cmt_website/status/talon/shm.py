@@ -88,9 +88,9 @@ class SHMStatusReader(StatusReaderInterface):
         t_struct = self._telescope_struct
         s_struct = self._status_struct
         self._telescope_position = TelescopePosition(
-            t_struct.unpack_from(shm_buffer, offset=t_offset)
+            *t_struct.unpack_from(shm_buffer, offset=t_offset)
         )
-        self._status = Status(s_struct.unpack_from(shm_buffer, offset=s_offset))
+        self._status = Status(*s_struct.unpack_from(shm_buffer, offset=s_offset))
 
     @property
     def telescope(self):
