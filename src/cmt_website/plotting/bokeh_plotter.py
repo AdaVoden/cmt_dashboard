@@ -67,7 +67,7 @@ class BokehPlotter(PlottingInterface):
     def pressure(self):
         """Plot of pressure data, replaces div with 'pressure' ID"""
         plot = self._plot_from_weatherfeature(
-            feature=self.weather.wind_speed,
+            feature=self.weather.pressure,
             title="Weather Station Pressure over Time",
             type="line",
         )
