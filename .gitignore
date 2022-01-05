@@ -162,3 +162,7 @@ distribute-*.tar.gz
 bookenv/
 jyenv/
 pypyenv/
+
+# Database
+*.db
+*.sqlite3
