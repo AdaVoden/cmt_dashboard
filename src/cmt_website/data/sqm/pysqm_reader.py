@@ -31,7 +31,6 @@ import string
 import time
 from asyncio.streams import StreamReader, StreamWriter
 from datetime import datetime, timedelta, timezone
-from socket import AF_INET, SOCK_STREAM, socket
 from typing import Any, Coroutine, Iterable, List, Literal, Tuple
 
 import numpy as np
@@ -125,16 +124,14 @@ class IPConnection:
         self.connection = asyncio.open_connection(
             host=self.ip_address,
             port=self.port,
-            family=AF_INET,
-            sock=SOCK_STREAM,
             limit=256,
         )
         return self.connection
 
-    async def __aexit__(self, exception_type, exception_val, traceback):
+    async def __aexit__(self, exception_type, exception_val, _):
         self.connection.close()
         if exception_type is None:
-            return False
+            return True
         else:
             logging.error(
                 f"Connection failed with exception type: {exception_type}, value: {exception_val}"
@@ -248,8 +245,8 @@ class SQMReader:
             )
         read_command = read_types[conn_type]
         read_verifier = f"{read_command[0]},"
-        async with self.connection as conn:
-            for num in range(tries):
+        for num in range(tries):
+            async with self.connection as conn:
                 reader, writer = await conn
                 writer.write(read_command.encode())
                 msg = (await reader.read(256)).decode()
@@ -263,16 +260,14 @@ class SQMReader:
                         f"On try {num} received {msg}. Expected {read_verifier} in message."
                     )
 
-        raise RuntimeError(
-            f"Unable to communicate with device, received message {msg}, expected it to contain {read_verifier}"
-        )
+        raise RuntimeError(f"Unable to communicate with device, tried {tries} times")
 
 
 @define
 class SQM:
     reader: SQMReader = field()
 
-    def read_photometer(self, Nmeasures=1, PauseMeasures=2):
+    def read(self, Nmeasures=1, PauseMeasures=2):
         # Initialize values
         temp_sensor = []
         flux_sensor = []
@@ -286,7 +281,7 @@ class SQM:
             InitialDateTime = datetime.now()
 
             # Get the raw data from the photometer and process it.
-            raw_data = self.reader.read_data(tries=10)
+            raw_data = asyncio.run(self.reader.read_data(tries=10))
 
             temp_sensor.append(raw_data.temperature)
             freq_sensor.append(raw_data.frequency)

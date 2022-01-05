@@ -3,8 +3,8 @@ from pathlib import Path
 from pyramid.config import Configurator
 from pyramid.router import Router
 
+import cmt_website.data.sqm as sqm
 import cmt_website.plotting as plots
-import cmt_website.sqm as sqm
 import cmt_website.status as status
 import cmt_website.weather as weather
 
