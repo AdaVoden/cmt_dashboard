@@ -27,6 +27,7 @@ pyramid-debugtoolbar = "^4.9"
 instrumental = "^0.5.3"
 black = "^21.12b0"
 watchdog = "^2.1.6"
+alembic = "^1.7.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
