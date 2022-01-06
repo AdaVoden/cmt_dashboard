@@ -72,7 +72,9 @@ class SHMStatusReader(StatusReaderInterface):
     def __attrs_post_init__(self):
         self.SHM_dec_key = int(self.SHM_hex_key, 16)
         try:
-            self._shared_memory = sysv.SharedMemory(self.SHM_dec_key)
+            self._shared_memory = sysv.SharedMemory(
+                self.SHM_dec_key, flags=sysv.SHM_RDONLY
+            )
             print(self._shared_memory)
             self._status_struct = Struct(STATUS_FORMAT)
             self._telescope_struct = Struct(TELESCOPE_POSITIONS_FORMAT)
