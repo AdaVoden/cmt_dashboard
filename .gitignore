@@ -163,3 +163,4 @@ distribute-*.tar.gz
 bookenv/
 jyenv/
 pypyenv/
+*.db

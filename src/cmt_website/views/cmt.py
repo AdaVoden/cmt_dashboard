@@ -10,6 +10,7 @@ from pyramid.view import view_config
 def cmt_page(request: Request):
     status_reader = request.registry.settings["status"]
     weather_data = request.registry.settings["weather_data"]
+    weather_data.update()
     telescope_status = status_reader.telescope
     dome_status = status_reader.dome
     utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
