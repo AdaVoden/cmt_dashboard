@@ -2,9 +2,9 @@ from struct import Struct
 
 import sysv_ipc as sysv
 from attr import define, field
-from cmt_website.status.dome import Dome, DomeState, ShutterState
+from cmt_website.status.dome import Dome
 from cmt_website.status.reader_interface import StatusReaderInterface
-from cmt_website.status.telescope import Telescope, TelescopeState
+from cmt_website.status.telescope import Telescope
 
 # Formats of structs defined for Talon shared memory
 # Used to read from shared memory buffer
@@ -71,11 +71,9 @@ class SHMStatusReader(StatusReaderInterface):
 
     def __attrs_post_init__(self):
         self.SHM_dec_key = int(self.SHM_hex_key, 16)
+        # Read only shared memory, permissions error if anything about 4
         try:
-            self._shared_memory = sysv.SharedMemory(
-                self.SHM_dec_key, flags=sysv.SHM_RDONLY
-            )
-            print(self._shared_memory)
+            self._shared_memory = sysv.SharedMemory(self.SHM_dec_key, flags=0, mode=4)
             self._status_struct = Struct(STATUS_FORMAT)
             self._telescope_struct = Struct(TELESCOPE_POSITIONS_FORMAT)
         except sysv.ExistentialError:
