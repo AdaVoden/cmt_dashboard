@@ -48,4 +48,5 @@ class WeatherData:
         logging.info("Created WeatherData class and features")
 
     def update(self):
+        logging.info("Updating Weather data")
         self._create_features(self.reader.read())

@@ -30,6 +30,7 @@ def cmt_page(request: Request):
 @view_config(route_name="plot", renderer="json")
 def plot_json(request: Request):
     plotter = request.registry.settings["plotter"]
+    plotter.weather.update()
     plot_type = request.matchdict["plot_name"]
     if plot_type == "temperature":
         return plotter.temperature
