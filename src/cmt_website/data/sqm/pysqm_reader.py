@@ -105,7 +105,7 @@ def _remove_non_digit_characters(data: str) -> str:
     return "".join(cleaned)
 
 
-@define
+@define(slots=True)
 class IPConnection:
     """Given a port and a IPv4 I.P. address, creates a context manager connection
     with the address at specified port"""
@@ -140,7 +140,7 @@ class IPConnection:
             return True
 
 
-@define
+@define(slots=True)
 class PhotometerData:
     """Dataclass for numeric data received from the SQM photometer"""
 
@@ -150,7 +150,7 @@ class PhotometerData:
     sky_brightness: float = field(converter=[_remove_non_digit_characters, float])
 
 
-@define
+@define(slots=True)
 class PhotometerMetadata:
     """Dataclass for the metadata from the SQM photometer"""
 
@@ -160,7 +160,7 @@ class PhotometerMetadata:
     serial_number: int = field(converter=[_remove_non_digit_characters, int])
 
 
-@define
+@define(slots=True)
 class SQMReader:
     """Reader for the SQM photometer, uses an IPConnection to query an SQM ethernet
     device and returns either the metadata from the device or the data from the
@@ -266,7 +266,7 @@ class SQMReader:
             )
 
 
-@define
+@define(slots=True)
 class SQM(AsyncDataReader):
     reader: SQMReader = field()
 

@@ -13,8 +13,10 @@ class PollerInterface(ABC):
         raise NotImplementedError
 
 
-@define
+@define(slots=True)
 class AsyncPoller(PollerInterface):
+    """Asynchronous poller, takes arbitrary Async reader and writes to corresponding writer"""
+
     reader: AsyncDataReader = field()
     writer: AsyncDataWriter = field()
     delay: float = field()
@@ -29,8 +31,10 @@ class AsyncPoller(PollerInterface):
             await asyncio.sleep(self.delay)
 
 
-@define
+@define(slots=True)
 class Poller(PollerInterface):
+    """Synchronous poller, takes arbitrary reader and writes to corresponding writer"""
+
     reader: DataReader = field()
     writer: DataWriter = field()
     delay: float = field()

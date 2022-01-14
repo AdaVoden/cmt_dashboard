@@ -35,5 +35,15 @@ def main(global_config, **settings) -> Router:
 
 
 def launch_as_daemon(func: Callable):
+    """Launches target function as a process, assumes function has no arguments to pass in
+
+    Parameters
+    ----------
+    func : Callable
+        Callable function with no arguments
+
+    """
+
     daemon = Process(group=None, target=func, daemon=True)
     daemon.start()
+    daemon.join()
