@@ -3,12 +3,12 @@ from typing import Union
 
 import pandas as pd
 from attr import define, field
-from cmt_website.weather.reader_interface import WeatherReaderInterface
+from cmt_website.data.interfaces import DataReader
 from numpy import float32, float64, int32
 
 
 @define(slots=True)
-class WXReader(WeatherReaderInterface):
+class WXReader(DataReader):
     """Reads the wx.log from Talon system using provided path and returns weather
     data from station"""
 

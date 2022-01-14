@@ -1,10 +1,12 @@
+from multiprocessing import Process
 from pathlib import Path
+from typing import Callable
 
 from pyramid.config import Configurator
 from pyramid.router import Router
 
+import cmt_website.data.sqm as sqm
 import cmt_website.plotting as plots
-import cmt_website.sqm as sqm
 import cmt_website.status as status
 import cmt_website.weather as weather
 
@@ -30,3 +32,17 @@ def main(global_config, **settings) -> Router:
         config.add_settings(weather_data=weather_data)
         config.add_settings(plotter=plotter)
     return config.make_wsgi_app()
+
+
+def launch_as_daemon(func: Callable):
+    """Launches target function as a process, assumes function has no arguments to pass in
+
+    Parameters
+    ----------
+    func : Callable
+        Callable function with no arguments
+
+    """
+
+    daemon = Process(group=None, target=func, daemon=True)
+    daemon.start()

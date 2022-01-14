@@ -3,9 +3,10 @@ name = "cmt_website"
 version = "0.1.0"
 description = "Information website for the Clarke-Milone Telescope"
 authors = ["Harlan Shaw <harlan.shaw@ucalgary.ca>"]
+packages = [{ include = "cmt_website", from = "src" }]
 
 [tool.poetry.dependencies]
-python = "3.9.*"
+python = ">=3.8.0 <3.10"
 pyramid = "^2.0"
 Mako = "^1.1.6"
 pyramid-mako = "^1.1.0"
@@ -17,6 +18,13 @@ PyYAML = "^6.0"
 attrs = "^21.2.0"
 sysv-ipc = "^1.1.0"
 bokeh = "^2.4.2"
+SQLAlchemy = "^1.4.29"
+plaster-pastedeploy = "^0.7"
+pyramid-tm = "^2.4"
+transaction = "^3.0.1"
+"zope.sqlalchemy" = "^1.6"
+alembic = "^1.7.5"
+pyramid-retry = "^2.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -27,7 +35,18 @@ pyramid-debugtoolbar = "^4.9"
 instrumental = "^0.5.3"
 black = "^21.12b0"
 watchdog = "^2.1.6"
+WebTest = "^3.0.0"
+Paste = "^3.5.0"
+coverage = "^6.2"
+pytest-cov = "^3.0.0"
+pytest-randomly = "^3.10.3"
+pytest-lazy-fixture = "^0.6.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "5.0"
+addopts = "-ra -p no:warnings"
+testpaths = ["tests"]

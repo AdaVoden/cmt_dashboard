@@ -31,11 +31,11 @@ import string
 import time
 from asyncio.streams import StreamReader, StreamWriter
 from datetime import datetime, timedelta, timezone
-from socket import AF_INET, SOCK_STREAM, socket
 from typing import Any, Coroutine, Iterable, List, Literal, Tuple
 
 import numpy as np
 from attr import define, field
+from cmt_website.data.interfaces import AsyncDataReader
 
 
 def _filtered_mean(array: Iterable[float], sigma: int = 3) -> float:
@@ -78,7 +78,7 @@ def _filtered_mean(array: Iterable[float], sigma: int = 3) -> float:
 
     # Return the mean of filtered data or the median.
     if np.size(filtered_values) == 0:
-        print("Warning: High dispersion found on last measures")
+        logging.warning("High dispersion found on last measures")
         filtered_mean = data_median
     else:
         filtered_mean = np.mean(filtered_values)
@@ -105,14 +105,14 @@ def _remove_non_digit_characters(data: str) -> str:
     return "".join(cleaned)
 
 
-@define
+@define(slots=True)
 class IPConnection:
     """Given a port and a IPv4 I.P. address, creates a context manager connection
     with the address at specified port"""
 
     ip_address: str = field(converter=str)
     port: int = field(converter=int)
-    connection: Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]] = field(
+    _connection: Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]] = field(
         init=False
     )
 
@@ -122,19 +122,17 @@ class IPConnection:
         logging.debug(
             f"Attempting to connect to SQM device at IP {str(self.ip_address)} and port {self.port}"
         )
-        self.connection = asyncio.open_connection(
+        self._connection = asyncio.open_connection(
             host=self.ip_address,
             port=self.port,
-            family=AF_INET,
-            sock=SOCK_STREAM,
             limit=256,
         )
-        return self.connection
+        return self._connection
 
-    async def __aexit__(self, exception_type, exception_val, traceback):
-        self.connection.close()
+    async def __aexit__(self, exception_type, exception_val, _):
+        self._connection.close()
         if exception_type is None:
-            return False
+            return True
         else:
             logging.error(
                 f"Connection failed with exception type: {exception_type}, value: {exception_val}"
@@ -142,7 +140,7 @@ class IPConnection:
             return True
 
 
-@define
+@define(slots=True)
 class PhotometerData:
     """Dataclass for numeric data received from the SQM photometer"""
 
@@ -152,7 +150,7 @@ class PhotometerData:
     sky_brightness: float = field(converter=[_remove_non_digit_characters, float])
 
 
-@define
+@define(slots=True)
 class PhotometerMetadata:
     """Dataclass for the metadata from the SQM photometer"""
 
@@ -162,7 +160,7 @@ class PhotometerMetadata:
     serial_number: int = field(converter=[_remove_non_digit_characters, int])
 
 
-@define
+@define(slots=True)
 class SQMReader:
     """Reader for the SQM photometer, uses an IPConnection to query an SQM ethernet
     device and returns either the metadata from the device or the data from the
@@ -186,10 +184,10 @@ class SQMReader:
         """
         data_array = await self._read(conn_type="data", tries=tries)
         return PhotometerData(
-            temperature=data_array[5],
+            sky_brightness=data_array[1],
             frequency=data_array[2],
             ticks=data_array[3],
-            sky_brightness=data_array[1],
+            temperature=data_array[5],
         )
 
     async def read_metadata(self, tries: int = 1) -> PhotometerMetadata:
@@ -263,16 +261,16 @@ class SQMReader:
                         f"On try {num} received {msg}. Expected {read_verifier} in message."
                     )
 
-        raise RuntimeError(
-            f"Unable to communicate with device, received message {msg}, expected it to contain {read_verifier}"
-        )
+            raise RuntimeError(
+                f"Unable to communicate with device, tried {tries} times"
+            )
 
 
-@define
-class SQM:
+@define(slots=True)
+class SQM(AsyncDataReader):
     reader: SQMReader = field()
 
-    def read_photometer(self, Nmeasures=1, PauseMeasures=2):
+    async def read(self, Nmeasures=1, PauseMeasures=2):
         # Initialize values
         temp_sensor = []
         flux_sensor = []
@@ -286,7 +284,7 @@ class SQM:
             InitialDateTime = datetime.now()
 
             # Get the raw data from the photometer and process it.
-            raw_data = self.reader.read_data(tries=10)
+            raw_data = await self.reader.read_data(tries=10)
 
             temp_sensor.append(raw_data.temperature)
             freq_sensor.append(raw_data.frequency)
