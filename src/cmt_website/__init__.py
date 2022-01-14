@@ -46,4 +46,3 @@ def launch_as_daemon(func: Callable):
 
     daemon = Process(group=None, target=func, daemon=True)
     daemon.start()
-    daemon.join()
