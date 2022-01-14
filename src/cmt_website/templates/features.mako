@@ -27,7 +27,7 @@
     <article class="telescope, block-${size}">
         <h2 class="widget-header"> ${name} </h2>
         <span class="widget-status"> <b>Status</b> ${telescope.state.name} </span>
-        % for coord, value in {"RA" : telescope.ra.hms, "DEC" : telescope.dec.hms, "HA": telescope.hour_angle.hms, "Altitude": telescope.altitude.dms, "Azimuth": telescope.azimuth.dms}.items():
+        % for coord, value in {"RA" : telescope.ra.hms, "DEC" : telescope.dec.dms, "HA": telescope.hour_angle.hms, "Altitude": telescope.altitude.dms, "Azimuth": telescope.azimuth.dms}.items():
             <span class="widget-value" > <b>${coord}</b> ${value} </span>
         % endfor
     </article>

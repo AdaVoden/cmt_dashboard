@@ -46,3 +46,7 @@ class WeatherData:
         """Post-initialization feature creation from weather data"""
         self._create_features(self.reader.read())
         logging.info("Created WeatherData class and features")
+
+    def update(self):
+        logging.info("Updating Weather data")
+        self._create_features(self.reader.read())
