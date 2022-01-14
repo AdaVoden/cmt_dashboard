@@ -1,4 +1,6 @@
+from multiprocessing import Process
 from pathlib import Path
+from typing import Callable
 
 from pyramid.config import Configurator
 from pyramid.router import Router
@@ -30,3 +32,8 @@ def main(global_config, **settings) -> Router:
         config.add_settings(weather_data=weather_data)
         config.add_settings(plotter=plotter)
     return config.make_wsgi_app()
+
+
+def launch_as_daemon(func: Callable):
+    daemon = Process(group=None, target=func, daemon=True)
+    daemon.start()

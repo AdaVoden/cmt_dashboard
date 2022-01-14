@@ -35,6 +35,7 @@ from typing import Any, Coroutine, Iterable, List, Literal, Tuple
 
 import numpy as np
 from attr import define, field
+from cmt_website.data.interfaces import AsyncDataReader
 
 
 def _filtered_mean(array: Iterable[float], sigma: int = 3) -> float:
@@ -77,7 +78,7 @@ def _filtered_mean(array: Iterable[float], sigma: int = 3) -> float:
 
     # Return the mean of filtered data or the median.
     if np.size(filtered_values) == 0:
-        print("Warning: High dispersion found on last measures")
+        logging.warning("High dispersion found on last measures")
         filtered_mean = data_median
     else:
         filtered_mean = np.mean(filtered_values)
@@ -111,7 +112,7 @@ class IPConnection:
 
     ip_address: str = field(converter=str)
     port: int = field(converter=int)
-    connection: Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]] = field(
+    _connection: Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]] = field(
         init=False
     )
 
@@ -121,15 +122,15 @@ class IPConnection:
         logging.debug(
             f"Attempting to connect to SQM device at IP {str(self.ip_address)} and port {self.port}"
         )
-        self.connection = asyncio.open_connection(
+        self._connection = asyncio.open_connection(
             host=self.ip_address,
             port=self.port,
             limit=256,
         )
-        return self.connection
+        return self._connection
 
     async def __aexit__(self, exception_type, exception_val, _):
-        self.connection.close()
+        self._connection.close()
         if exception_type is None:
             return True
         else:
@@ -183,10 +184,10 @@ class SQMReader:
         """
         data_array = await self._read(conn_type="data", tries=tries)
         return PhotometerData(
-            temperature=data_array[5],
+            sky_brightness=data_array[1],
             frequency=data_array[2],
             ticks=data_array[3],
-            sky_brightness=data_array[1],
+            temperature=data_array[5],
         )
 
     async def read_metadata(self, tries: int = 1) -> PhotometerMetadata:
@@ -245,8 +246,8 @@ class SQMReader:
             )
         read_command = read_types[conn_type]
         read_verifier = f"{read_command[0]},"
-        for num in range(tries):
-            async with self.connection as conn:
+        async with self.connection as conn:
+            for num in range(tries):
                 reader, writer = await conn
                 writer.write(read_command.encode())
                 msg = (await reader.read(256)).decode()
@@ -260,14 +261,16 @@ class SQMReader:
                         f"On try {num} received {msg}. Expected {read_verifier} in message."
                     )
 
-        raise RuntimeError(f"Unable to communicate with device, tried {tries} times")
+            raise RuntimeError(
+                f"Unable to communicate with device, tried {tries} times"
+            )
 
 
 @define
-class SQM:
+class SQM(AsyncDataReader):
     reader: SQMReader = field()
 
-    def read(self, Nmeasures=1, PauseMeasures=2):
+    async def read(self, Nmeasures=1, PauseMeasures=2):
         # Initialize values
         temp_sensor = []
         flux_sensor = []
@@ -281,7 +284,7 @@ class SQM:
             InitialDateTime = datetime.now()
 
             # Get the raw data from the photometer and process it.
-            raw_data = asyncio.run(self.reader.read_data(tries=10))
+            raw_data = await self.reader.read_data(tries=10)
 
             temp_sensor.append(raw_data.temperature)
             freq_sensor.append(raw_data.frequency)
