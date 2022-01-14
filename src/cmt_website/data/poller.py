@@ -26,7 +26,7 @@ class AsyncPoller(PollerInterface):
         in between read/write sessions"""
         while True:
             data = await self.reader.read()
-            asyncio.create_task(self.writer.write(data))
+            await self.writer.write(data)
 
             await asyncio.sleep(self.delay)
 
