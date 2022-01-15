@@ -7,6 +7,7 @@ from sqlalchemy.engine.base import Engine
 @define
 class DBReader(DataReader):
     engine: Engine = field()
+    table: str = field()
 
     def read(self) -> pd.DataFrame:
         pass
