@@ -1,8 +1,7 @@
 import numpy as np
-from cmt_website.data.database.models import Base
+from cmt_website.data.database.models import SQM, Base, Weather
 from cmt_website.data.database.reader import DBReader
-from hypothesis import given
-from hypothesis.extra.numpy import datetime64_dtypes
+from hypothesis import assume, given
 from hypothesis.extra.pandas import column, data_frames
 from hypothesis.strategies import datetimes, timezones
 from sqlalchemy.engine.create import create_engine
@@ -17,15 +16,17 @@ def temp_memory_db(future=False):
 @given(
     data_frames(
         [
-            column(name="time", elements=datetimes(timezones=timezones()), unique=True),
+            column(name="time", elements=datetimes(allow_imaginary=False), unique=True),
             column(name="temperature", dtype=float),
             column(name="humidity", dtype=float),
+            column(name="pressure", dtype=float),
             column(name="wind speed", dtype=float),
             column(name="wind direction", dtype=float),
         ]
     ),
 )
 def test_read_weather(weather):
+    assume(len(weather) > 0)
     engine = temp_memory_db()
     with engine.begin() as connection:
         weather.to_sql(
@@ -36,7 +37,7 @@ def test_read_weather(weather):
             index_label="time",
         )
 
-    reader = DBReader(engine=engine, table="weather")
+    reader = DBReader(engine=engine, table=Weather)
     read_data = reader.read()
 
     assert len(read_data) == len(weather)
@@ -49,19 +50,20 @@ def test_read_weather(weather):
 @given(
     data_frames(
         [
-            column(name="time", elements=datetimes(timezones=timezones()), unique=True),
+            column(name="time", elements=datetimes(allow_imaginary=False), unique=True),
             column(name="brightness", dtype=float),
         ]
     )
 )
 def test_read_sqm(sqm):
+    assume(len(sqm) > 0)
     engine = temp_memory_db()
     with engine.begin() as connection:
         sqm.to_sql(
             "sqm", con=connection, if_exists="append", index=False, index_label="time"
         )
 
-    reader = DBReader(engine=engine, table="sqm")
+    reader = DBReader(engine=engine, table=SQM)
     read_data = reader.read()
     assert len(read_data) == len(sqm)
     for col in read_data.columns:
