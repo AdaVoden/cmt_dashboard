@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from cmt_website.weather.data import WeatherData
-from cmt_website.weather.wx_reader import WXReader
+from cmt_website.data.weather.data import WeatherData
+from cmt_website.data.weather.wx_reader import WXReader
 
 
 def make_watched_weatherdata(reader_path: Path) -> WeatherData:

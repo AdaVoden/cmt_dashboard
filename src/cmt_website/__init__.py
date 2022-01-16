@@ -8,7 +8,7 @@ from pyramid.router import Router
 import cmt_website.data.sqm as sqm
 import cmt_website.plotting as plots
 import cmt_website.status as status
-import cmt_website.weather as weather
+import cmt_website.data.weather as weather
 
 
 def main(global_config, **settings) -> Router:

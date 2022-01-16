@@ -8,8 +8,8 @@ from bokeh.embed import json_item
 from bokeh.models import DatetimeTickFormatter, NumeralTickFormatter
 from bokeh.plotting import Figure, figure
 from cmt_website.plotting.plot_interface import PlottingInterface
-from cmt_website.weather.data import WeatherData
-from cmt_website.weather.feature import WeatherFeature
+from cmt_website.data.weather.data import WeatherData
+from cmt_website.data.weather.feature import WeatherFeature
 
 
 @define
