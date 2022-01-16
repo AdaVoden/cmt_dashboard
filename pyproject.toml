@@ -27,7 +27,7 @@ alembic = "^1.7.5"
 pyramid-retry = "^2.1.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6"
 tox = "^3.24.4"
 waitress = "^2.0.0"
 hypothesis = "^6.31.6"
@@ -41,12 +41,14 @@ coverage = "^6.2"
 pytest-cov = "^3.0.0"
 pytest-randomly = "^3.10.3"
 pytest-lazy-fixture = "^0.6.3"
+pytest-asyncio = "^0.17.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-minversion = "5.0"
-addopts = "-ra -p no:warnings"
+minversion = "6.0"
+asyncio_mode = "auto"
+addopts = "-ra -p no:warnings --import-mode=importlib"
 testpaths = ["tests"]

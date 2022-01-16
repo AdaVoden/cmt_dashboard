@@ -1,5 +1,5 @@
 """Pyramid bootstrap environment. """
-from cmt_website.data.database.models import SQM
+from cmt_website.data.database.models import SQM, Base, Weather
 from pyramid.paster import get_appsettings, setup_logging
 from sqlalchemy import engine_from_config
 
@@ -10,7 +10,7 @@ config = context.config
 setup_logging(config.config_file_name)
 
 settings = get_appsettings(config.config_file_name)
-target_metadata = SQM.metadata
+target_metadata = Base.metadata
 
 
 def run_migrations_offline():
