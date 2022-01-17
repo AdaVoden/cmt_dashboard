@@ -133,11 +133,14 @@ class IPConnection:
         self._connection.close()
         if exception_type is None:
             return True
+        elif exception_type is TimeoutError:
+            # ignore error, just keep trying
+            return True
         else:
             logging.error(
                 f"Connection failed with exception type: {exception_type}, value: {exception_val}"
             )
-            return True
+            return False
 
 
 @define(slots=True)
@@ -250,7 +253,8 @@ class SQMReader:
             for num in range(tries):
                 reader, writer = await conn
                 writer.write(read_command.encode())
-                msg = (await reader.read(256)).decode()
+                data = await reader.read(256)
+                msg = data.decode()
 
                 try:
                     assert read_verifier in msg
@@ -269,19 +273,21 @@ class SQMReader:
 @define(slots=True)
 class SQM(AsyncDataReader):
     reader: SQMReader = field()
+    measures: int = field(default=1)
+    pause_measures: int = field(default=2)
 
-    async def read(self, Nmeasures=1, PauseMeasures=2):
+    async def read(self):
         # Initialize values
         temp_sensor = []
         flux_sensor = []
         freq_sensor = []
         ticks_uC = []
-        Nremaining = Nmeasures
+        n_remaining = self.measures
 
         # Promediate N measures to remove jitter
         timeutc_initial = datetime.now(timezone.utc)
-        while Nremaining > 0:
-            InitialDateTime = datetime.now()
+        while n_remaining > 0:
+            initial_date_time = datetime.now()
 
             # Get the raw data from the photometer and process it.
             raw_data = await self.reader.read_data(tries=10)
@@ -290,11 +296,11 @@ class SQM(AsyncDataReader):
             freq_sensor.append(raw_data.frequency)
             ticks_uC.append(raw_data.ticks)
             flux_sensor.append(10 ** (-0.4 * raw_data.sky_brightness))
-            Nremaining -= 1
-            DeltaSeconds = (datetime.now() - InitialDateTime).total_seconds()
+            n_remaining -= 1
+            delta_seconds = (datetime.now() - initial_date_time).total_seconds()
 
-            if Nremaining > 0:
-                time.sleep(max(1, PauseMeasures - DeltaSeconds))
+            if n_remaining > 0:
+                time.sleep(max(1, self.pause_measures - delta_seconds))
 
         timeutc_final = datetime.now(timezone.utc)
         timeutc_delta = timeutc_final - timeutc_initial
