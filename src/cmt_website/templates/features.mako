@@ -58,3 +58,11 @@
         </script>
     % endfor
 </%def>
+
+<%def name="time(name, value)">
+    <div class="time" id="${name}">
+        <h3>${name}</h3>
+        <time>${value}</time>
+
+    </div>
+</%def>

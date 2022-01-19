@@ -14,9 +14,7 @@ def cmt_page(request: Request):
 
     return {
         "weather_features": weather_data.features,
-        "date": time.date,
-        "utc": time.utc,
-        "lst": time.lst,
+        "observatory_time": time,
         "telescope": telescope_status,
         "dome": dome_status,
         "plots": ["temperature", "windspeed", "winddirection", "humidity", "pressure"],
