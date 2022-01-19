@@ -25,6 +25,7 @@ along with PySQM.  If not, see <http://www.gnu.org/licenses/>.
 ____________________________
 """
 
+from abc import ABC, abstractmethod
 import asyncio
 import logging
 import string
@@ -105,8 +106,20 @@ def _remove_non_digit_characters(data: str) -> str:
     return "".join(cleaned)
 
 
+class SQMConnector(ABC):
+    @abstractmethod
+    async def __aenter__(
+        self,
+    ) -> Coroutine[Any, Any, Tuple[StreamReader, StreamWriter]]:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def __aexit__(self) -> bool:
+        raise NotImplementedError
+
+
 @define(slots=True)
-class IPConnection:
+class IPConnection(SQMConnector):
     """Given a port and a IPv4 I.P. address, creates a context manager connection
     with the address at specified port"""
 
@@ -129,12 +142,13 @@ class IPConnection:
         )
         return self._connection
 
-    async def __aexit__(self, exception_type, exception_val, _):
+    async def __aexit__(self, exception_type, exception_val, _) -> bool:
         self._connection.close()
         if exception_type is None:
             return True
         elif exception_type is TimeoutError:
             # ignore error, just keep trying
+            logging.debug(f"Connection to {self.ip_address} timed out.")
             return True
         else:
             logging.error(
@@ -169,7 +183,7 @@ class SQMReader:
     device and returns either the metadata from the device or the data from the
     device, depending on functions called"""
 
-    connection: IPConnection = field()
+    connection: SQMConnector = field()
 
     async def read_data(self, tries: int = 1) -> PhotometerData:
         """Reads data from target SQM photometer
