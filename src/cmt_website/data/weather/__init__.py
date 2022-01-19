@@ -1,1 +1,1 @@
-from .factory import make_watched_weatherdata
+from .factory import make_weatherdata

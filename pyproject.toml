@@ -25,6 +25,7 @@ transaction = "^3.0.1"
 "zope.sqlalchemy" = "^1.6"
 alembic = "^1.7.5"
 pyramid-retry = "^2.1.1"
+astropy = "^5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6"
