@@ -1,6 +1,8 @@
+from astropy.coordinates.angles import Longitude
 from attr import define, field
 from astropy.coordinates.earth import EarthLocation
 from astropy.time import Time
+from astropy.units import deg
 from datetime import datetime, timezone
 
 
@@ -54,9 +56,9 @@ def make_time(longitude: float, latitude: float, height: float) -> ObservatoryTi
         along with UTC
 
     """
-    if longitude < 0 or longitude > 360:
+    if longitude < -180 or longitude > 180:
         raise ValueError(
-            f"Expected longitude to be between 0 and 360 degrees, received {longitude}"
+            f"Expected longitude to be between -180 and 180 degrees, received {longitude}"
         )
     if latitude < -90 or latitude > 90:
         raise ValueError(
@@ -64,6 +66,7 @@ def make_time(longitude: float, latitude: float, height: float) -> ObservatoryTi
         )
     if height < 0:
         raise ValueError(f"Expected height to be at least 0, received {height}")
+    longitude = Longitude(angle=longitude * deg, wrap_angle=180 * deg)
     location = EarthLocation.from_geodetic(lon=longitude, lat=latitude, height=height)
     o_time = ObservatoryTime(location)
     return o_time

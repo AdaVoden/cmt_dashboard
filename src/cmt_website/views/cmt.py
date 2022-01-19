@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime, timezone
 
 from pyramid.request import Request
 from pyramid.view import view_config
@@ -11,16 +10,15 @@ def cmt_page(request: Request):
     status_reader = request.registry.settings["status"]
     weather_data = request.registry.settings["weather_data"]
     weather_data.update()
+    time = request.registry.settings["time"]
     telescope_status = status_reader.telescope
     dome_status = status_reader.dome
-    utc = datetime.now(timezone.utc).strftime("%H:%M:%S")
-    local = datetime.now().strftime("%H:%M:%S")
-    date = datetime.today().strftime("%d/%m/%y")
+
     return {
         "weather_features": weather_data.features,
-        "date": date,
-        "utc": utc,
-        "lst": local,
+        "date": time.date,
+        "utc": time.utc,
+        "lst": time.lst,
         "telescope": telescope_status,
         "dome": dome_status,
         "plots": ["temperature", "windspeed", "winddirection", "humidity", "pressure"],

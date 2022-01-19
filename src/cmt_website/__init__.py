@@ -29,9 +29,9 @@ def main(global_config, **settings) -> Router:
         weather_data = data.make_weatherdata(reader_path=log_path)
         telescope_reader = status.make_status_reader()
         plotter = plots.make_plotter(weather_data)
-        lat = settings["site.latitude"]
-        long = settings["site.longitude"]
-        height = settings["site.height"]
+        lat = float(settings["site.latitude"])
+        long = float(settings["site.longitude"])
+        height = float(settings["site.height"])
         observatory_time = data.make_time(longitude=long, latitude=lat, height=height)
 
         config.add_settings(status=telescope_reader)
