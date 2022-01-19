@@ -1,5 +1,3 @@
-import logging
-
 from pyramid.request import Request
 from pyramid.view import view_config
 
@@ -43,20 +41,3 @@ def plot_json(request: Request):
     if plot_type == "sqm":
         return plotter.sqm
     return {}
-
-
-# @view_config(route_name="weather", renderer="cmt_website:templates/weather.mako")
-# def weather_page(request):
-#     weather_data = request.registry.settings["weather_data"]
-#     return {"weather_data": weather_data}
-
-
-# @view_config(route_name="sqm", renderer="cmt_website:templates/sqm.mako")
-# def sqm_page(request: Request):
-#     sqm = request.registry.settings["sqm"]
-#     try:
-#         _, _, _, _, _, sky_brightness = sqm.read_photometer()
-#     except OSError as e:
-#         logging.error(f"Unable to communicate with SQM device, received error {e}")
-#         return {"sky_brightness": "ERROR"}
-#     return {"sky_brightness": sky_brightness}

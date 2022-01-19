@@ -7,7 +7,7 @@
 
     --font: sans-serif;
     --font-mono: monospace;
-    --font-size: 12px; /*base 12 instead of 16*/
+    --font-size: 10px; /*base 10 instead of 16*/
     --linemax: 35;
     --lineheight: 1.5;
 
@@ -31,5 +31,10 @@
 
 
     /* Nice web colours */
-    --very-light-grey: #FBFBFB
+    --very-light-grey: #EBEBEB;
+    --middle-grey: #B1B1B1;
+    --dark-grey: #424242:
+
+
+
 }
