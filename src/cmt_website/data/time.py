@@ -54,7 +54,16 @@ def make_time(longitude: float, latitude: float, height: float) -> ObservatoryTi
         along with UTC
 
     """
-
+    if longitude < 0 or longitude > 360:
+        raise ValueError(
+            f"Expected longitude to be between 0 and 360 degrees, received {longitude}"
+        )
+    if latitude < -90 or latitude > 90:
+        raise ValueError(
+            f"Expected latitude to be between -90 and 90 degrees, received {latitude}"
+        )
+    if height < 0:
+        raise ValueError(f"Expected height to be at least 0, received {height}")
     location = EarthLocation.from_geodetic(lon=longitude, lat=latitude, height=height)
     o_time = ObservatoryTime(location)
     return o_time
