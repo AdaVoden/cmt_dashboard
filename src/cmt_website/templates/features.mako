@@ -23,31 +23,52 @@
     </article>
 </%def>
 
-<%def name="telescope_widget(telescope, size, name='Clark-Milone Telescope')">
-    <article class="telescope, block-${size}">
-        <h2 class="widget-header"> ${name} </h2>
-        <span class="widget-status"> <b>Status</b> ${telescope.state.name} </span>
-        % for coord, value in {"RA" : telescope.ra.hms, "DEC" : telescope.dec.dms, "HA": telescope.hour_angle.hms, "Altitude": telescope.altitude.dms, "Azimuth": telescope.azimuth.dms}.items():
-            <span class="widget-value" > <b>${coord}</b> ${value} </span>
+<%def name="telescope_card(telescope)">
+    <%self:card id="telescope" title="Telescope">
+        ${status(value=telescope.state.name)}
+        <div id="horizontal">
+        % for coord, value in {"RA" : telescope.ra.hms, "DEC" : telescope.dec.dms, "HA": telescope.hour_angle.hms}.items():
+            ${named_data(name=coord, value=value)}
         % endfor
+        </div>
+        <div id="vertical">
+        % for coord, value in {"ALT": telescope.altitude.dms, "AZ": telescope.azimuth.dms}.items():
+            ${named_data(name=coord, value=value)}
+        % endfor
+        </div>
+
+    </%self:card>
+</%def>
+
+<%def name="dome_shutter_card(dome)">
+    <%self:card id="dome" title="Dome">
+        ${status(value=dome.state.name)}
+        ${named_data(name="AZ", value=dome.azimuth.dms)}
+    </%self:card>
+    <%self:card id="shutter" title="Shutter">
+        ${status(value=dome.shutterstate.name)}
+    </%self:card>
+</%def>
+
+<%def name="card(title, id='')">
+    <article class="card shadow" id="${id}">
+        <section class="title"> <h2>${title}</h2></section>
+        <section class="body">
+            ${caller.body()}
+        </section>
     </article>
 </%def>
 
-<%def name="dome_widget(dome, size)">
-    <article class="dome, block-${size}">
-        <h2 class="widget-header" > Dome </h2>
-        <span class="widget_status" > <b>Status</b> ${dome.state.name} </span>
-        <span class="widget-value"> <b>Azimuth</b> ${dome.azimuth.dms}</span>
-    </article>
-    <article class="shutter, block-${size}">
-        <h2 class="widget-header" > Shutter </h2>
-        <span class="widget_status" > <b>Status</b> ${dome.shutterstate.name} </span>
-    </article>
+<%def name="status_block(status)">
+    <section class="status-block">
+        ${dome_shutter_card(status.dome)}
+        ${telescope_card(status.telescope)}
+    </section>
 </%def>
 
 <%def name="bokeh_plot_divs(targets, size=2)">
     % for target in targets:
-        <article class="plot, block-${size}">
+        <article class="plot">
             <div id="${target}">
             </div>
         </article>
@@ -60,9 +81,23 @@
 </%def>
 
 <%def name="time(name, value)">
-    <div class="time" id="${name}">
+    <div id="${name}">
         <h3>${name}</h3>
         <time>${value}</time>
+    </div>
+</%def>
 
+<%def name="status(value)">
+    <div class="status">
+        <h2>${value}</h2>
+    </div>
+</%def>
+
+<%def name="named_data(name, value=None)">
+    <div class="data">
+        <h3>${name}</h2>
+        % if value:
+            <span class="value" > ${value} </span>
+        % endif
     </div>
 </%def>

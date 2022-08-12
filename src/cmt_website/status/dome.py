@@ -11,7 +11,7 @@ class DomeState(Enum):
     Rotating: Rotating into target position
     Homing: Seeking dome's home"""
 
-    ERROR = -1
+    OFFLINE = -1
     ABSENT = 0
     STOPPED = 1
     ROTATING = 2
@@ -27,7 +27,7 @@ class ShutterState(Enum):
     Open: Shutter is open
     Closed: Shutter is closed"""
 
-    ERROR = -1
+    OFFLINE = -1
     ABSENT = 0
     IDLE = 1
     OPENING = 2

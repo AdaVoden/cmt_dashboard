@@ -9,15 +9,11 @@ def cmt_page(request: Request):
     weather_data = request.registry.settings["weather_data"]
     weather_data.update()
     time = request.registry.settings["time"]
-    telescope_status = status_reader.telescope
-    dome_status = status_reader.dome
-
     return {
         "weather_features": weather_data.features,
         "observatory_time": time,
-        "telescope": telescope_status,
-        "dome": dome_status,
-        "plots": ["temperature", "windspeed", "winddirection", "humidity", "pressure"],
+        "status": status_reader,
+        "plots": ["temperature", "windspeed", "humidity", "pressure"],
     }
 
 

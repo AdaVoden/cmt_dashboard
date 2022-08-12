@@ -1,14 +1,13 @@
 <%namespace name="features", file="features.mako"/>
 <%page args="weather_features,
 observatory_time,
-telescope,
-dome,
+status,
 plots"/>
 <!DOCTYPE html>
 <html>
     <%include file="head.mako"/>
     <body>
-        <header class="card">
+        <header class="shadow">
             <section id="title-block">
                 <h1>Clark-Milone Telescope</h1>
             </section>
@@ -20,8 +19,7 @@ plots"/>
         </header>
         <main>
             <section>
-                ${features.telescope_widget(telescope, size=2)}
-                ${features.dome_widget(dome, size=2)}
+                ${features.status_block(status)}
             </section>
             <section>
                 ${features.all_weather(weather_features)}
