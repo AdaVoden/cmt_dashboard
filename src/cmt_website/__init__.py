@@ -1,8 +1,6 @@
-from datetime import datetime, timezone
 from multiprocessing import Process
 from pathlib import Path
 from typing import Callable
-from astropy.coordinates.earth import EarthLocation
 
 from pyramid.config import Configurator
 from pyramid.router import Router

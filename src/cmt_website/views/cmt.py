@@ -13,7 +13,7 @@ def cmt_page(request: Request):
         "weather_features": weather_data.features,
         "observatory_time": time,
         "status": status_reader,
-        "plots": ["temperature", "windspeed", "humidity", "pressure"],
+        "plots": ["temperature", "humidity", "pressure"],
     }
 
 
@@ -24,10 +24,8 @@ def plot_json(request: Request):
     plot_type = request.matchdict["plot_name"]
     if plot_type == "temperature":
         return plotter.temperature
-    if plot_type == "windspeed":
-        return plotter.wind_speed
-    if plot_type == "winddirection":
-        return plotter.wind_direction
+    if plot_type == "wind_rose":
+        return plotter.wind_rose
     if plot_type == "humidity":
         return plotter.humidity
     if plot_type == "pressure":

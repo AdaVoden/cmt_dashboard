@@ -33,25 +33,14 @@ class BokehPlotter(PlottingInterface):
         return json_item(plot, "temperature")
 
     @property
-    def wind_speed(self):
+    def wind_rose(self):
         """Plot of wind speed data, replaces div with 'wind-speed' ID"""
         plot = self._make_wind_rose(
             self.weather.wind_direction.last(3, "hour"),
             self.weather.wind_speed.last(3, "hour"),
             "Wind Rose",
         )
-        return json_item(plot, "windspeed")
-
-    @property
-    def wind_direction(self):
-        """Plot of wind_direction data, replaces div with 'wind-direction' ID"""
-        plot = self._plot_from_weatherfeature(
-            feature=self.weather.wind_direction,
-            title="Weather Station Wind Direction over Time",
-            type="scatter",
-        )
-        plot.yaxis[0].axis_label = "Wind Direction [Degrees East from North]"
-        return json_item(plot, "winddirection")
+        return json_item(plot, "wind_rose")
 
     @property
     def humidity(self):
@@ -213,6 +202,21 @@ class BokehPlotter(PlottingInterface):
         max_wind_speed: float = 100,
     ):
 
+        """Makes a wind rose plot from given wind speed/direction
+
+        :param wind_direction: Direction of the wind as a timeseries
+        :param wind_speed: Speed of the wind as a timeseries
+        :param title: Title of the plot
+        :param radius: Radius the plot will have (in pixels)
+        :param padding: Padding from outside of the plot to the edge of window
+        :param inner_radius: Inner circle of plot, for aesthetics
+        :param grid_circles: How many circles comprise the polar plot's grid
+        :param angle_width: Width of the data wedges, in radians
+        :param max_wind_speed: Maximum wind speed allowed
+        :returns: Wind rose figure plot for display
+
+        """
+
         # Combine and rename
         df = pd.concat([wind_direction, wind_speed], axis=1, join="inner")
         df = df.rename(
@@ -324,6 +328,15 @@ class BokehPlotter(PlottingInterface):
     def wind_speed_to_colour(
         wind_speed: float, maximum_wind_speed: float, colours: List[str]
     ):
+
+        """Converts the wind speed to a colour based on maximum wind speed
+
+        :param wind_speed: wind speed value
+        :param maximum_wind_speed: The maximum allowed wind speed
+        :param colours: List of hex value colours to convert to
+        :returns: Colour mapping of the wind speed
+
+        """
         fraction_of_max = wind_speed / maximum_wind_speed
         # -1 for the len of colours since we start counting at 0
         # and don't want an off-by-one error
