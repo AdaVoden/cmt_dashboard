@@ -62,7 +62,7 @@ main {
     padding-left: 2.4rem;
     padding-right: 2.4rem;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 4fr;
     gap: 1.5rem;
 }
 /* Class defintions that influence the 'cards' of the page */
@@ -132,14 +132,34 @@ main {
 }
 /* Weather card settings */
 .weather_status {
-    height: 100%;
     text-align: center;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem;
+}
+.weather_min_max{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 #right-content .card {
     height: 25rem;
 }
 #right-content .card .content {
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 1fr 8fr;
     align-items: center;
+}
+
+/*Card title colour settings */
+#telescope .title, #dome .title, #shutter .title {
+    background-color: var(--telescope-title);
+}
+#Temperature .title {
+    background-color: var(--temperature-title);
+}
+#Humidity .title{
+    background-color: var(--humidity-title);
+}
+#Pressure .title {
+    background-color: var(--pressure-title);
 }

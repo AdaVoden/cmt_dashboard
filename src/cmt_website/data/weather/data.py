@@ -20,10 +20,10 @@ class WeatherData:
     def features(self) -> Dict[str, WeatherFeature]:
         return {
             "Temperature": self.temperature,
-            "Wind speed": self.wind_speed,
-            "Wind direction": self.wind_direction,
             "Humidity": self.humidity,
             "Pressure": self.pressure,
+            "Wind speed": self.wind_speed,
+            "Wind direction": self.wind_direction,
         }
 
     def _create_features(self, df: pd.DataFrame):

@@ -29,6 +29,11 @@
     --middle-grey: #B1B1B1;
     --dark-grey: #424242;
 
+    --telescope-title: #DEDEF1;
+    --temperature-title: #E4C9BA;
+    --humidity-title: #EBE4C5;
+    --pressure-title: #B1B1B1;
+    --wind-rose-title: #F3DCDC;
     /* Design */
     --border-radius: 0.5rem;
 

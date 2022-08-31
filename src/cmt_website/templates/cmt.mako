@@ -28,7 +28,7 @@ plots"/>
             </section>
             <section id="right-content"> <!-- Righthand side, weather graphs -->
                 % for name, feature, plot in (zip(weather_features.keys(), weather_features.values(), plots)):
-                    ${widget_card.weather(feature, name, 1, plot)}
+                    ${widget_card.weather(feature, name, plot)}
                 % endfor
             </section>
         </main>

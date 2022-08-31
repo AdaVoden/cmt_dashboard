@@ -27,14 +27,14 @@ class BokehPlotter(PlottingInterface):
         plot = self._plot_from_weatherfeature(
             feature=self.weather.temperature,
             title="Weather Station Temperature over Time",
-            type="line",
+            type="scatter",
         )
         plot.yaxis[0].axis_label = "Temperature [\u00B0 C]"
         return json_item(plot, "temperature")
 
     @property
     def wind_rose(self):
-        """Plot of wind speed data, replaces div with 'wind-speed' ID"""
+        """Plot of wind speed data, replaces div with 'wind-rose' ID"""
         plot = self._make_wind_rose(
             self.weather.wind_direction.last(3, "hour"),
             self.weather.wind_speed.last(3, "hour"),
@@ -48,7 +48,7 @@ class BokehPlotter(PlottingInterface):
         plot = self._plot_from_weatherfeature(
             feature=self.weather.humidity,
             title="Weather Station Humidity over Time",
-            type="line",
+            type="scatter",
         )
         plot.yaxis[0].axis_label = "Humidity [%]"
         return json_item(plot, "humidity")
@@ -59,7 +59,7 @@ class BokehPlotter(PlottingInterface):
         plot = self._plot_from_weatherfeature(
             feature=self.weather.pressure,
             title="Weather Station Pressure over Time",
-            type="line",
+            type="scatter",
         )
         plot.yaxis[0].axis_label = "Pressure [mbar]"
         return json_item(plot, "pressure")
@@ -90,9 +90,11 @@ class BokehPlotter(PlottingInterface):
         current_timezone = utc_dt.astimezone().tzname()
         fig = figure(
             title=title,
-            sizing_mode="scale_both",
             x_axis_label=f"Time [{current_timezone}]",
-            max_height=230,
+            width_policy="fit",
+            height_policy="min",
+            height=225,
+            sizing_mode="stretch_width",
         )
         return fig
 
@@ -118,6 +120,7 @@ class BokehPlotter(PlottingInterface):
 
         """
         data = feature.last(amount=30, interval="day")
+        data = data.resample("30T").mean().dropna()
         x_data = data.index.to_numpy()
         y_data = data.to_numpy()
         if type == "line":
