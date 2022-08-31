@@ -71,7 +71,7 @@ class SHMStatusReader(StatusReaderInterface):
 
     def __attrs_post_init__(self):
         self.SHM_dec_key = int(self.SHM_hex_key, 16)
-        # Read only shared memory, permissions error if anything about 4
+        # Read only shared memory, permissions error if anything other than 4
         try:
             self._shared_memory = sysv.SharedMemory(self.SHM_dec_key, flags=0, mode=4)
             self._status_struct = Struct(STATUS_FORMAT)
