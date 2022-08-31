@@ -1,3 +1,4 @@
+from typing import Dict
 from astropy.coordinates.angles import Longitude
 from attr import define, field
 from astropy.coordinates.earth import EarthLocation
@@ -35,6 +36,10 @@ class ObservatoryTime:
         astro_time = Time(datetime.now(timezone.utc), location=self.location)
         lst = astro_time.sidereal_time(kind="apparent")
         return lst.to_string(decimal=False, sep=":", precision=0, pad=True)
+
+    @property
+    def times(self) -> Dict[str, str]:
+        return {self.timezone: self.local, "UTC": self.utc, "LST": self.lst}
 
 
 def make_time(longitude: float, latitude: float, height: float) -> ObservatoryTime:

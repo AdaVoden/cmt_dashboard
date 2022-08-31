@@ -1,34 +1,165 @@
 @import url("variables.css");
 html {
-    background-color: var(--very-light-grey);
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-display: auto;
     font-size: var(--font-size);
 
 }
-body {
-    display: grid;
-    grid-template-areas: "header" "time" "main";
-    grid-template-rows: minmax(1.6rem, auto), minmax(1.4rem, auto), 1fr;
-    gap: 1.1rem;
+h1, h2, h3, h4, h5 {
+    margin: 0;
+    font-weight: bold;
 }
 h1 {
-    font-size: 1.4rem;
+    font-size: 2.8rem;
 }
 h2 {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
 }
+h3 {
+    font-size: 1.4rem;
+}
+
+/* Main body definitions */
+body {
+    background-color: var(--very-light-grey);
+    margin: 0 0 0 0;
+    display: grid;
+    grid-template-areas: "header" "main";
+    grid-template-rows: minmax(auto, 5.0rem) 1fr;
+}
+/* Header, time and main page titles */
+header {
+    background-color: var(--middle-grey);
+    display: grid;
+    grid-template-areas: "title" "time";
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+    align-content: center;
+}
+header h1 {
+    padding-left: 2.0rem;
+}
+#title-block {
+    display:flex;
+    align-items: center;
+}
+#time-block {
+    background-color: var(--dark-grey);
+    color: white;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+}
+#time-block span{
+    text-align: center;
+}
+time {
+    font-size: 1.5rem;
+}
+/* Main sections of content */
 main {
+    padding-top: 1.5rem;
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
     display: grid;
-    grid-template-areas: "weather", "status", "plots";
-    grid-template-rows: repeat(auto-fill);
-    gap: 0.5rem;
+    grid-template-columns: 1fr 4fr;
+    gap: 1.5rem;
 }
-section {
+/* Class defintions that influence the 'cards' of the page */
+.shadow {
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.25);
+}
+.card {
+    background: white;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 12rem);
-    gap: 1rem;
+    grid-template-rows: 2.5rem 1fr;
+    align-items: center;
+    width: 100%;
+    border-radius: var(--border-radius);
+    gap: 0rem;
 }
-#plots {
-    grid-template-columns: repeat(auto-fill, 30rem);
+.card .title {
+    height: 100%;
+    text-align: center;
+    display: grid;
+    align-items: center;
+    background-color: var(--accent-teal); /* Default card title colour */
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+.card .content{
+    display: grid;
+    align-items: center;
+    height: 100%;
+}
+.data, .status {
+    text-align: center;
+}
+/* Specific card ID definitions */
+#left-content, #right-content {
+    display: flex;
+    gap: 1.5rem;
+    flex-direction: column;
+}
+#status-block {
+    display: grid;
+    gap: 1.5rem;
+    height: 20rem;
+}
+#telescope {
+    grid-column: 2/6;
+    grid-row: 1/4;
+}
+#horizontal, #vertical {
+    display: grid;
+    align-items: center;
+}
+#horizontal {
+    grid-template-columns: repeat(3, 1fr);
+}
+#vertical {
+    grid-template-columns: repeat(2, 1fr);
+}
+#dome {
+    grid-column: 1/1;
+    grid-row: 1/3;
+    height: 100%;
+}
+#shutter {
+    grid-column: 1/1;
+    grid-row: 3/4;
+    height: 100%;
+}
+/* Weather card settings */
+.weather_status {
+    text-align: center;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem;
+}
+.weather_min_max{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+#right-content .card {
+    height: 25rem;
+}
+#right-content .card .content {
+    display: grid;
+    grid-template-columns: 1fr 8fr;
+    align-items: center;
+}
+
+/*Card title colour settings */
+#telescope .title, #dome .title, #shutter .title {
+    background-color: var(--telescope-title);
+}
+#Temperature .title {
+    background-color: var(--temperature-title);
+}
+#Humidity .title{
+    background-color: var(--humidity-title);
+}
+#Pressure .title {
+    background-color: var(--pressure-title);
 }

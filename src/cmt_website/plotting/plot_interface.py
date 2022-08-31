@@ -7,11 +7,7 @@ class PlottingInterface(ABC):
         raise NotImplementedError
 
     @abstractproperty
-    def wind_speed(self):
-        raise NotImplementedError
-
-    @abstractproperty
-    def wind_direction(self):
+    def wind_rose(self):
         raise NotImplementedError
 
     @abstractproperty

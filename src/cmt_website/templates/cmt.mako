@@ -1,34 +1,36 @@
-<%namespace name="features", file="features.mako"/>
-<%page args="weather_features,
-date,
-utc,
-lst,
-telescope,
-dome,
-plots"/>
-<%inherit file="base.mako" />
+<%namespace name="widget_card", file="widget_card.mako"/>
 
-<%block name="title">
-    <title>The 16" Telescope at the RAO</title>
-</%block>
-<article class="time">
-        <b>Date:</b> ${date} <b>UTC:</b> ${utc}
-        <b>LST:</b> ${lst}
-</article>
-<main>
-    <section>
-        ${features.all_weather(weather_features)}
-    </section>
-    <section>
-        ${features.telescope_widget(telescope, size=2)}
-        ${features.dome_widget(dome, size=2)}
-    </section>
-    <section id="plots">
-        ${features.bokeh_plot_divs(plots)}
-    </section>
-</main>
-<footer>
-    <a href="http://cleardarksky.com/c/RothneyALkey.html" target="new">
-        <img src="http://cleardarksky.com/csk/getcsk.php?id=RothneyAL">
-    </a>
-</footer>
+<%page args="weather_features,
+observatory_time,
+status,
+plots"/>
+<!DOCTYPE html>
+<html>
+    <%include file="head.mako"/>
+    <body>
+        <header class="shadow"> <!-- Top of screen header -->
+            <section id="title-block">
+                <h1>Clark-Milone Telescope</h1>
+            </section>
+            <section id="time-block"> <!-- For showing relevant and needed times -->
+                %for name, time in observatory_time.times.items():
+                    ${widget_card.time(name, time)}
+                %endfor
+            </section>
+        </header>
+        <main>
+            <section id="left-content"> <!-- Lefthand side, status and wind rose -->
+                <article id="status-block">
+                    ${widget_card.dome(status.dome)}
+                    ${widget_card.telescope(status.telescope)}
+                </article>
+                    ${widget_card.wind_rose()}
+            </section>
+            <section id="right-content"> <!-- Righthand side, weather graphs -->
+                % for name, feature, plot in (zip(weather_features.keys(), weather_features.values(), plots)):
+                    ${widget_card.weather(feature, name, plot)}
+                % endfor
+            </section>
+        </main>
+    </body>
+</html>
