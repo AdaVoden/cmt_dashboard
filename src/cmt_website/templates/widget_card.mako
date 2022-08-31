@@ -1,15 +1,16 @@
 <%namespace name="base", file="widget_base.mako"/>
 
 <%def name="weather(weather_feature, name, size, plot)">
-    <%base:card id="weather", title="${name}">
+    <%base:card title="${name}">
         <section class="weather_status">
-            <%self:status value="${weather_feature.current}"></%self:status>
+            <h3>Current</h3>
+            <%self:status value="${weather_feature.current}" unit="${weather_feature.unit}"></%self:status>
             <h3>Today</h3>
             ${named_data(name="Max", value=weather_feature.maximum, unit=weather_feature.unit)}
             ${named_data(name="Min", value=weather_feature.minimum, unit=weather_feature.unit)}
         </section>
         <section class="weather_plot">
-            ${base.bokeh_plot(plot, 2)}
+            <%base:bokeh_plot target="${plot}" ></%base:bokeh_plot>
         </section>
     </%base:card>
 </%def>
@@ -41,8 +42,8 @@
 </%def>
 
 <%def name="wind_rose()">
-    <%base:card id="wind_rose" title="Wind Direction and Speed">
-        ${base.bokeh_plot("wind_rose", 2)}
+    <%base:card id="wind_rose_container" title="Wind Direction and Speed">
+        ${base.bokeh_plot("wind_rose")}
     </%base:card>
 
 </%def>
@@ -57,9 +58,9 @@
 <%def name="status(value, unit=None)">
     <span class="status">
         % if unit:
-            <h4>${value} ${unit}</h4>
+            <h2>${value} ${unit}</h2>
         % else:
-            <h4>${value} </h4>
+            <h2>${value} </h2>
         % endif
     </span>
 </%def>
@@ -67,8 +68,10 @@
 <%def name="named_data(name, value=None, unit=None)">
     <span class="data">
         <h3>${name}</h3>
-        % if value:
-            ${status(value=value, unit=unit)}
+        % if value and unit:
+            <h4> ${value} ${unit} </h4>
+        % elif value:
+            <h4> ${value} </h4>
         % endif
     </span>
 </%def>

@@ -1,20 +1,14 @@
 /* Project variables */
 
 :root {
-    /*===========\
-    | Typography |
-    \===========*/
-
+    /* Typography */
     --font: sans-serif;
     --font-mono: monospace;
     --font-size: 10px; /*base 10 instead of 16*/
     --linemax: 35;
     --lineheight: 1.5;
 
-    /*=======\
-    | Colour |
-    \=======*/
-
+    /* Colours */
     /* UofC colours */
     --primary-red: #d6001c;
     --primary-gold: #ffcd00;
@@ -35,6 +29,7 @@
     --middle-grey: #B1B1B1;
     --dark-grey: #424242;
 
-
+    /* Design */
+    --border-radius: 0.5rem;
 
 }

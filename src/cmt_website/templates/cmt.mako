@@ -20,15 +20,13 @@ plots"/>
         </header>
         <main>
             <section id="left-content"> <!-- Lefthand side, status and wind rose -->
-                <section id="status-block">
+                <article id="status-block">
                     ${widget_card.dome(status.dome)}
                     ${widget_card.telescope(status.telescope)}
-                </section>
-                <section id="wind_rose">
+                </article>
                     ${widget_card.wind_rose()}
-                </sections>
-            </section id="right-content">
-            <section> <!-- Righthand side, weather graphs -->
+            </section>
+            <section id="right-content"> <!-- Righthand side, weather graphs -->
                 % for name, feature, plot in (zip(weather_features.keys(), weather_features.values(), plots)):
                     ${widget_card.weather(feature, name, 1, plot)}
                 % endfor

@@ -16,7 +16,7 @@ import pandas as pd
 
 @define
 class BokehPlotter(PlottingInterface):
-    """Plotting object, has necessary data inserted and creates JSON-readable JSON
+    """Plotting object, has necessary data inserted and creates JSON
     scripts that replaces target divs"""
 
     weather: WeatherData = field()
@@ -92,8 +92,7 @@ class BokehPlotter(PlottingInterface):
             title=title,
             sizing_mode="scale_both",
             x_axis_label=f"Time [{current_timezone}]",
-            max_width=750,
-            max_height=750,
+            max_height=230,
         )
         return fig
 
