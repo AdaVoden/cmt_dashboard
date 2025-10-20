@@ -2,7 +2,7 @@
 name = "cmt_website"
 version = "0.1.0"
 description = "Information website for the Clarke-Milone Telescope"
-authors = ["Harlan Shaw <harlan.shaw@ucalgary.ca>"]
+authors = ["Ada Voden <ada@voden.ca>"]
 packages = [{ include = "cmt_website", from = "src" }]
 
 [tool.poetry.dependencies]
